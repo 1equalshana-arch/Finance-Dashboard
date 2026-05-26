@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/finance.js": {
+      "runtime": "edge"
+    }
+  }
+}
