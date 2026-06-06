@@ -171,6 +171,21 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 /* MCAP TABLE */
 .mcap-rank{font-family:var(--mono);font-size:11px;color:var(--text3);width:24px;}
  
+/* MODAL TABS */
+.m-tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--card2);border-radius:10px;padding:4px;}
+.m-tab{flex:1;padding:7px;border:none;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);background:none;transition:all .18s;}
+.m-tab.active{background:var(--card3);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.m-tab-panel{display:none;}
+.m-tab-panel.active{display:block;}
+.mcap-inp-row{display:grid;grid-template-columns:36px 1fr 36px;gap:7px;align-items:center;margin-bottom:6px;}
+.mcap-rank-lbl{font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;}
+.sector-inp-block{margin-bottom:14px;padding:12px;background:var(--card2);border-radius:10px;}
+.sector-inp-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.sector-color-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.sector-inp-name{font-size:12px;font-weight:600;color:var(--text);}
+.pick-row{display:grid;grid-template-columns:32px 1fr 1fr 36px;gap:6px;align-items:center;margin-bottom:5px;}
+.pick-rank-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);text-align:center;}
+ 
 /* RESPONSIVE */
 @media(max-width:1100px){.idx-row{grid-template-columns:1fr 1fr;}.two-col,.three-col{grid-template-columns:1fr;}.goal-row{grid-template-columns:1fr 1fr;}}
 @media(max-width:700px){
@@ -190,19 +205,45 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 <!-- PORTFOLIO MODAL -->
 <div class="modal-ov" id="pfModal">
 <div class="modal">
-  <div class="modal-t">포트폴리오 편집 <button class="mcls" onclick="closeModal()">✕</button></div>
-  <div class="ms-ttl">💵 현금 버퍼</div>
-  <div class="cash-g">
-    <div><label class="inp-l">USD 현금 ($)</label><input class="m-inp" type="number" id="cashUSD" placeholder="0"/></div>
-    <div><label class="inp-l">KRW 현금 (₩)</label><input class="m-inp" type="number" id="cashKRW" placeholder="0"/></div>
+  <div class="modal-t">대시보드 편집 <button class="mcls" onclick="closeModal()">✕</button></div>
+ 
+  <!-- TABS -->
+  <div class="m-tabs">
+    <button class="m-tab active" onclick="switchTab('pf',this)">💼 포트폴리오</button>
+    <button class="m-tab" onclick="switchTab('mcap',this)">🏆 시총 TOP 10</button>
+    <button class="m-tab" onclick="switchTab('sector',this)">📊 섹터별 TOP 3</button>
   </div>
-  <div class="ms-ttl">🎯 목표 설정</div>
-  <div class="cash-g">
-    <div><label class="inp-l">목표 수익 (만원)</label><input class="m-inp" type="number" id="goalAmt" placeholder="5000"/></div>
-    <div><label class="inp-l">초기 원금 (만원)</label><input class="m-inp" type="number" id="principalAmt" placeholder="23000"/></div>
+ 
+  <!-- TAB: 포트폴리오 -->
+  <div class="m-tab-panel active" id="tab-pf">
+    <div class="ms-ttl">💵 현금 버퍼</div>
+    <div class="cash-g">
+      <div><label class="inp-l">USD 현금 ($)</label><input class="m-inp" type="number" id="cashUSD" placeholder="0"/></div>
+      <div><label class="inp-l">KRW 현금 (₩)</label><input class="m-inp" type="number" id="cashKRW" placeholder="0"/></div>
+    </div>
+    <div class="ms-ttl">🎯 목표 설정</div>
+    <div class="cash-g">
+      <div><label class="inp-l">목표 수익 (만원)</label><input class="m-inp" type="number" id="goalAmt" placeholder="5000"/></div>
+      <div><label class="inp-l">초기 원금 (만원)</label><input class="m-inp" type="number" id="principalAmt" placeholder="23000"/></div>
+    </div>
+    <div id="modal-cats"></div>
+    <button class="save-btn" onclick="savePortfolio()">💾 저장 및 적용</button>
   </div>
-  <div id="modal-cats"></div>
-  <button class="save-btn" onclick="savePortfolio()">💾 저장 및 적용</button>
+ 
+  <!-- TAB: 시총 TOP 10 -->
+  <div class="m-tab-panel" id="tab-mcap">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px">순서대로 1~10위. 티커만 입력하면 됩니다 (대문자).</div>
+    <div id="mcap-edit-list"></div>
+    <button class="save-btn" onclick="saveMcap()">💾 저장 및 적용</button>
+  </div>
+ 
+  <!-- TAB: 섹터별 TOP 3 -->
+  <div class="m-tab-panel" id="tab-sector">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px">섹터명과 1~3위 티커를 입력하세요.</div>
+    <div id="sector-edit-list"></div>
+    <button class="add-btn" onclick="addSectorEdit()" style="margin-bottom:8px">+ 섹터 추가</button>
+    <button class="save-btn" onclick="saveSectors()">💾 저장 및 적용</button>
+  </div>
 </div>
 </div>
  
@@ -408,17 +449,18 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 const REBALANCE_MONTHS = [1,4,7,10];
  
 // US Market Cap Top 10 tickers (approximate, update periodically)
+// 2026.06 기준 미국 시총 순위 (수동 업데이트 필요 시 여기만 수정)
 const MCAP_TICKERS = [
-  {ticker:'AAPL',  name:'Apple',       sector:'기술'},
-  {ticker:'NVDA',  name:'Nvidia',      sector:'반도체'},
-  {ticker:'MSFT',  name:'Microsoft',   sector:'기술'},
-  {ticker:'AMZN',  name:'Amazon',      sector:'이커머스'},
-  {ticker:'GOOGL', name:'Alphabet',    sector:'광고/AI'},
-  {ticker:'META',  name:'Meta',        sector:'소셜/AR'},
-  {ticker:'TSLA',  name:'Tesla',       sector:'전기차'},
-  {ticker:'AVGO',  name:'Broadcom',    sector:'반도체'},
-  {ticker:'BRK-B', name:'Berkshire',   sector:'지주사'},
-  {ticker:'TSM',   name:'TSMC',        sector:'파운드리'},
+  {ticker:'NVDA',  name:'Nvidia',      sector:'반도체'},   // 1위 ~$5.2T
+  {ticker:'GOOGL', name:'Alphabet',    sector:'광고/AI'},  // 2위 ~$4.6T
+  {ticker:'AAPL',  name:'Apple',       sector:'기술'},     // 3위 ~$4.5T
+  {ticker:'MSFT',  name:'Microsoft',   sector:'기술'},     // 4위 ~$3.1T
+  {ticker:'AMZN',  name:'Amazon',      sector:'이커머스'}, // 5위 ~$2.9T
+  {ticker:'META',  name:'Meta',        sector:'소셜/AR'},  // 6위
+  {ticker:'TSLA',  name:'Tesla',       sector:'전기차'},   // 7위
+  {ticker:'AVGO',  name:'Broadcom',    sector:'반도체'},   // 8위
+  {ticker:'BRK-B', name:'Berkshire',   sector:'지주사'},   // 9위
+  {ticker:'TSM',   name:'TSMC',        sector:'파운드리'}, // 10위
 ];
  
 // Sector leaders: each sector has up to 3 ranked picks
@@ -497,6 +539,26 @@ let state = {
   portfolio: JSON.parse(localStorage.getItem('sigma_pf') || 'null') || DEFAULT_PF,
 };
 let charts = {};
+ 
+// localStorage에 저장된 커스텀 설정 복원
+(function() {
+  const savedMcap = localStorage.getItem('sigma_mcap');
+  if (savedMcap) {
+    try {
+      const m = JSON.parse(savedMcap);
+      MCAP_TICKERS.length = 0;
+      m.forEach(t => MCAP_TICKERS.push(t));
+    } catch {}
+  }
+  const savedSectors = localStorage.getItem('sigma_sectors');
+  if (savedSectors) {
+    try {
+      const s = JSON.parse(savedSectors);
+      SECTOR_LEADERS.length = 0;
+      s.forEach(x => SECTOR_LEADERS.push(x));
+    } catch {}
+  }
+})();
  
 // ─── FETCH ───────────────────────────────────────────────
 // /api/finance → Vercel serverless proxy → Yahoo Finance
@@ -932,6 +994,13 @@ function drawDonut(items,total){
 }
  
 // ─── MODAL ───────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.m-tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.m-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+ 
 function openModal(){
   const p=state.portfolio;
   document.getElementById('cashUSD').value=p.cashUSD||0;
@@ -939,9 +1008,18 @@ function openModal(){
   document.getElementById('goalAmt').value=p.goalMan||5000;
   document.getElementById('principalAmt').value=p.principalMan||23000;
   renderModalCats();
+  renderMcapEdit();
+  renderSectorEdit();
+  // 항상 첫 탭으로 초기화
+  document.querySelectorAll('.m-tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.m-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-pf').classList.add('active');
+  document.querySelector('.m-tab').classList.add('active');
   document.getElementById('pfModal').classList.add('open');
 }
 function closeModal(){document.getElementById('pfModal').classList.remove('open');}
+ 
+// ── 포트폴리오 탭 ─────────────────────────────────────────
 function renderModalCats(){
   const p=state.portfolio;
   document.getElementById('modal-cats').innerHTML=p.categories.map((cat)=>`
@@ -969,6 +1047,95 @@ function savePortfolio(){
   localStorage.setItem('sigma_pf',JSON.stringify(state.portfolio));
   closeModal();
   renderPortfolio();
+}
+ 
+// ── 시총 TOP 10 탭 ────────────────────────────────────────
+function renderMcapEdit(){
+  document.getElementById('mcap-edit-list').innerHTML = MCAP_TICKERS.map((t,i)=>`
+    <div class="mcap-inp-row">
+      <span class="mcap-rank-lbl">${i+1}</span>
+      <input class="m-inp" id="mcap-t-${i}" value="${t.ticker}" placeholder="NVDA" style="text-transform:uppercase"/>
+      <button class="rm-btn" style="font-size:12px;width:36px;height:36px" onclick="clearMcapRow(${i})">✕</button>
+    </div>`).join('') +
+    `<div class="mcap-inp-row" id="mcap-row-extra" style="display:none">
+      <span class="mcap-rank-lbl">+</span>
+      <input class="m-inp" id="mcap-t-extra" placeholder="티커 추가"/>
+      <span></span>
+    </div>`;
+}
+function clearMcapRow(i){
+  const el = document.getElementById(`mcap-t-${i}`);
+  if(el) el.value='';
+}
+function saveMcap(){
+  const inputs = document.querySelectorAll('[id^="mcap-t-"]');
+  const newList = [];
+  inputs.forEach(inp=>{
+    const v = inp.value.trim().toUpperCase();
+    if(v) newList.push({ticker:v, name:v, sector:'—'});
+  });
+  if(!newList.length){alert('최소 1개 이상 입력하세요.');return;}
+  MCAP_TICKERS.length=0;
+  newList.forEach(t=>MCAP_TICKERS.push(t));
+  localStorage.setItem('sigma_mcap', JSON.stringify(MCAP_TICKERS));
+  closeModal();
+  refreshAll();
+}
+ 
+// ── 섹터별 TOP 3 탭 ──────────────────────────────────────
+function renderSectorEdit(){
+  document.getElementById('sector-edit-list').innerHTML = SECTOR_LEADERS.map((s,si)=>`
+    <div class="sector-inp-block" id="sedit-${si}">
+      <div class="sector-inp-hdr">
+        <span class="sector-color-dot" style="background:${s.color}"></span>
+        <input class="m-inp" value="${s.name}" placeholder="섹터명"
+          oninput="SECTOR_LEADERS[${si}].name=this.value"
+          style="font-size:12px;font-weight:600;padding:5px 8px"/>
+        <button class="rm-btn" onclick="removeSectorEdit(${si})" style="margin-left:auto;flex-shrink:0">−</button>
+      </div>
+      ${s.picks.map((p,pi)=>`
+        <div class="pick-row">
+          <span class="pick-rank-lbl">${pi===0?'🥇':pi===1?'🥈':'🥉'}</span>
+          <input class="m-inp" value="${p.ticker}" placeholder="NVDA"
+            oninput="SECTOR_LEADERS[${si}].picks[${pi}].ticker=this.value.toUpperCase()"
+            style="text-transform:uppercase;font-size:12px;padding:5px 8px"/>
+          <input class="m-inp" value="${p.fullName}" placeholder="회사명"
+            oninput="SECTOR_LEADERS[${si}].picks[${pi}].fullName=this.value"
+            style="font-size:12px;padding:5px 8px"/>
+          <button class="rm-btn" onclick="removePickEdit(${si},${pi})">−</button>
+        </div>`).join('')}
+      ${s.picks.length<3?`<button class="add-btn" onclick="addPickEdit(${si})" style="margin-top:4px">+ 종목 추가</button>`:''}
+    </div>`).join('');
+}
+function removeSectorEdit(si){
+  SECTOR_LEADERS.splice(si,1);
+  renderSectorEdit();
+}
+function removePickEdit(si,pi){
+  SECTOR_LEADERS[si].picks.splice(pi,1);
+  renderSectorEdit();
+}
+function addPickEdit(si){
+  if(SECTOR_LEADERS[si].picks.length>=3) return;
+  SECTOR_LEADERS[si].picks.push({ticker:'',fullName:'',shares:0});
+  renderSectorEdit();
+}
+function addSectorEdit(){
+  const colors=['#6c63ff','#22d3a5','#38bdf8','#f59e0b','#ff5f5f','#a78bfa','#fb923c','#34d399'];
+  const col = colors[SECTOR_LEADERS.length % colors.length];
+  SECTOR_LEADERS.push({id:'new'+Date.now(),name:'새 섹터',color:col,picks:[{ticker:'',fullName:'',shares:0}]});
+  renderSectorEdit();
+}
+function saveSectors(){
+  // 빈 티커 pick 제거
+  SECTOR_LEADERS.forEach(s=>{s.picks=s.picks.filter(p=>p.ticker.trim())});
+  // 빈 섹터 제거
+  const valid = SECTOR_LEADERS.filter(s=>s.picks.length>0);
+  SECTOR_LEADERS.length=0;
+  valid.forEach(s=>SECTOR_LEADERS.push(s));
+  localStorage.setItem('sigma_sectors', JSON.stringify(SECTOR_LEADERS));
+  closeModal();
+  refreshAll();
 }
  
 function toggleTheme(){document.body.dataset.theme=document.body.dataset.theme==='dark'?'light':'dark';}
