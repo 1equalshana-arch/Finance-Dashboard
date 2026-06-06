@@ -303,7 +303,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
       <th class="r">오늘 등락</th>
       <th class="r">고점 대비</th>
       <th class="r">MA20 대비</th>
-      <th style="width:100px">20일 추세</th>
+ 
     </tr></thead>
     <tbody id="mcapTbl"><tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">로딩 중...</td></tr></tbody>
   </table>
@@ -499,26 +499,23 @@ let state = {
 let charts = {};
  
 // ─── FETCH ───────────────────────────────────────────────
-// Yahoo Finance via allorigins CORS proxy (no API key needed)
-const YF_PROXY = 'https://query1.finance.yahoo.com/v8/finance/chart/';
-const CORS = url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+// /api/finance → Vercel serverless proxy → Yahoo Finance
+// (api/finance.js 가 CORS 헤더 및 UA 처리)
  
-// Cache: avoid hammering same ticker twice in one refresh cycle
 const _cache = {};
  
 async function fetchYF(ticker) {
   if (_cache[ticker]) return _cache[ticker];
   try {
-    const yfUrl = `${YF_PROXY}${encodeURIComponent(ticker)}?interval=1d&range=3mo`;
-    const r = await fetch(CORS(yfUrl));
-    if (!r.ok) throw new Error(r.status);
+    const r = await fetch(`/api/finance?ticker=${encodeURIComponent(ticker)}`);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
+    if (d.error) throw new Error(d.error);
     const res = d.chart?.result?.[0];
     if (!res) return null;
     const q = res.indicators?.quote?.[0];
     const timestamps = res.timestamp || [];
     const rawCloses = q?.close || [];
-    // Filter nulls but keep index alignment with timestamps
     const pairs = rawCloses.map((v,i)=>({v,ts:timestamps[i]})).filter(p=>p.v!=null);
     const closes = pairs.map(p=>p.v);
     const labels  = pairs.map(p=>{
@@ -552,10 +549,10 @@ async function fetchYF(ticker) {
  
 async function fetchFX() {
   try {
-    // Open Exchange Rates (free, no key for latest base USD)
-    const r = await fetch(CORS('https://open.er-api.com/v6/latest/USD'));
-    if (!r.ok) throw new Error(r.status);
+    const r = await fetch('/api/finance?type=fx');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
+    if (d.error) throw new Error(d.error);
     const rates = d.rates || {};
     const krw = rates.KRW || 1350;
     return {
@@ -647,10 +644,6 @@ function drawSpark(id, closes, labels, inv=false, height=56) {
   });
 }
  
-// Inline sparkline canvas for table cells
-function drawInlineSpark(id, closes, labels, inv=false) {
-  drawSpark(id, closes, labels, inv, 36);
-}
  
 // ─── REBALANCE CHECK ─────────────────────────────────────
 function checkRebalance() {
@@ -710,7 +703,6 @@ function renderMcapTable(mcapData) {
  
   document.getElementById('mcapTbl').innerHTML = ranked.map((item, i) => {
     const d = item.d;
-    const cid = `mcap-spark-${item.ticker}`;
     return `<tr>
       <td><span class="rank-badge ${rankBadgeClass(i)}">${i+1}</span></td>
       <td>
@@ -723,16 +715,8 @@ function renderMcapTable(mcapData) {
       <td class="r ${d?cc(d.changePct):'neu'}" style="font-family:var(--mono)">${d?fp(d.changePct):'—'}</td>
       <td class="r ${d?cc(d.fromHigh):'neu'}" style="font-family:var(--mono)">${d?fp(d.fromHigh):'—'}</td>
       <td class="r ${d?cc(d.ma20Pct):'neu'}" style="font-family:var(--mono)">${d?fp(d.ma20Pct):'—'}</td>
-      <td style="min-width:100px"><canvas id="${cid}" style="width:100%;height:36px"></canvas></td>
     </tr>`;
   }).join('');
- 
-  // Draw sparklines after DOM update
-  setTimeout(()=>{
-    ranked.forEach(item=>{
-      if(item.d?.closes) drawInlineSpark(`mcap-spark-${item.ticker}`, item.d.closes, item.d.labels);
-    });
-  }, 50);
 }
  
 // ─── GOAL TRACKER ────────────────────────────────────────
