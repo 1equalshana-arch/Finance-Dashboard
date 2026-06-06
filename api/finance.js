@@ -13,17 +13,13 @@ const YF_HEADERS = {
   'Referer': 'https://finance.yahoo.com/',
 };
  
-// YF는 ^ 기호를 인코딩 없이 그대로 받아야 하는 경우가 있음
-// 두 엔드포인트 모두 시도해서 성공한 것 반환
-async function fetchYF(ticker) {
-  // ^VIX, ^KS11 등: 인코딩 버전과 raw 버전 모두 시도
-  const urls = [
+// chart v8로 히스토리 데이터 가져오기
+async function fetchChart(ticker) {
+  const candidates = [
     `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=3mo`,
     `https://query2.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=3mo`,
-    `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=3mo`,
   ];
- 
-  for (const url of urls) {
+  for (const url of candidates) {
     try {
       const r = await fetch(url, { headers: YF_HEADERS });
       if (!r.ok) continue;
@@ -31,6 +27,42 @@ async function fetchYF(ticker) {
       if (data?.chart?.result?.[0]) return data;
     } catch {}
   }
+  return null;
+}
+ 
+// ^VIX 전용: quoteSummary로 현재가 + 히스토리 모두 확보
+async function fetchVIX() {
+  // 방법 1: chart 직접 (raw ^ 그대로)
+  const chartData = await fetchChart('^VIX');
+  if (chartData) return chartData;
+ 
+  // 방법 2: quote 엔드포인트에서 현재가만 가져온 뒤 chart 형태로 래핑
+  try {
+    const r = await fetch(
+      'https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5EVIX',
+      { headers: YF_HEADERS }
+    );
+    if (!r.ok) throw new Error('quote failed');
+    const d = await r.json();
+    const q = d?.quoteResponse?.result?.[0];
+    if (!q) throw new Error('no quote result');
+    // chart 형태로 래핑해서 반환 (closes 배열은 현재가 단일값)
+    return {
+      chart: {
+        result: [{
+          meta: {
+            regularMarketPrice: q.regularMarketPrice,
+            previousClose: q.regularMarketPreviousClose,
+            fiftyTwoWeekHigh: q.fiftyTwoWeekHigh,
+            fiftyTwoWeekLow: q.fiftyTwoWeekLow,
+          },
+          timestamp: [Date.now() / 1000],
+          indicators: { quote: [{ close: [q.regularMarketPrice] }] }
+        }]
+      }
+    };
+  } catch {}
+ 
   return null;
 }
  
@@ -44,7 +76,7 @@ export default async function handler(req, res) {
  
   const { ticker, type } = req.query;
  
-  // ── FX ────────────────────────────────────────────────────────
+  // ── FX ──────────────────────────────────────────────────────
   if (type === 'fx') {
     try {
       const r = await fetch('https://open.er-api.com/v6/latest/USD');
@@ -55,10 +87,10 @@ export default async function handler(req, res) {
     }
   }
  
-  // ── 주가 ──────────────────────────────────────────────────────
+  // ── 주가 ────────────────────────────────────────────────────
   if (!ticker) return res.status(400).json({ error: 'ticker required' });
  
-  const data = await fetchYF(ticker);
+  const data = ticker === '^VIX' ? await fetchVIX() : await fetchChart(ticker);
   if (!data) return res.status(502).json({ error: `No data for ${ticker}` });
   return res.status(200).json(data);
 }
