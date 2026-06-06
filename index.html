@@ -13,7 +13,7 @@
   --card:#14141e; --card2:#1c1c28; --card3:#22222f;
   --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
   --text:#e8e8f2; --text2:#8a8aaa; --text3:#50506a;
-  --accent:#6c63ff; --accent2:#a78bfa;
+  --accent:#6BC1E7; --accent2:#a0d8ef;
   --green:#1fd4a0; --red:#ff5f5f; --amber:#f59e0b; --blue:#38bdf8;
   --mono:'DM Mono',monospace; --sans:'DM Sans',sans-serif; --disp:'Syne',sans-serif;
 }
@@ -22,7 +22,7 @@
   --card:#ffffff; --card2:#f5f5fc; --card3:#ededf8;
   --border:rgba(0,0,0,0.07); --border2:rgba(0,0,0,0.14);
   --text:#111120; --text2:#55557a; --text3:#aaaacc;
-  --accent:#5b52e8; --accent2:#7c6ff5;
+  --accent:#3aa8d8; --accent2:#6ab8e0;
   --green:#0c9e72; --red:#d94040; --amber:#c97f06; --blue:#0277b5;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -193,9 +193,9 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .ticker-err{color:var(--red);}
 .ticker-loading{color:var(--text3);}
 /* 포트폴리오 행: 티커 | 이름(자동) | 수량 | 삭제 */
-.pf-row{display:grid;grid-template-columns:90px 1fr 65px 36px;gap:7px;margin-bottom:10px;align-items:start;}
+.pf-row{display:grid;grid-template-columns:1fr 65px 36px;gap:7px;margin-bottom:10px;align-items:start;}
 /* 섹터 pick행: 순위 | 티커 | 이름(자동) | 삭제 */
-.pick-row{display:grid;grid-template-columns:32px 100px 1fr 36px;gap:6px;align-items:start;margin-bottom:6px;}
+.pick-row{display:grid;grid-template-columns:32px 1fr 36px;gap:6px;align-items:start;margin-bottom:6px;}
  
 /* RESPONSIVE */
 @media(max-width:1100px){.idx-row{grid-template-columns:1fr 1fr;}.two-col,.three-col{grid-template-columns:1fr;}.goal-row{grid-template-columns:1fr 1fr;}}
@@ -1086,7 +1086,6 @@ function renderModalCats() {
               onkeydown="if(event.key==='Enter')this.blur()"/>
             <div class="ticker-status ticker-ok" id="pf-ts-${cat.id}-${si}">${s.name&&s.name!==s.ticker?'✓ '+s.name:''}</div>
           </div>
-          <div style="font-size:11px;color:var(--text2);padding-top:9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" id="pf-nm-${cat.id}-${si}">${s.name||''}</div>
           <input type="number" value="${s.shares}" placeholder="수량"
             class="m-inp" oninput="updS('${cat.id}',${si},'shares',parseFloat(this.value)||0)"/>
           <button class="rm-btn" onclick="rmS('${cat.id}',${si})">−</button>
@@ -1097,11 +1096,9 @@ function renderModalCats() {
 }
 async function pfTickerBlur(cid, si, inputEl) {
   const statusEl = document.getElementById(`pf-ts-${cid}-${si}`);
-  const nameEl   = document.getElementById(`pf-nm-${cid}-${si}`);
   await onTickerBlur(inputEl, statusEl, info => {
     updS(cid, si, 'ticker', info.ticker);
     updS(cid, si, 'name',   info.name);
-    if (nameEl) nameEl.textContent = info.name;
   });
 }
 function updS(cid,si,f,v){const c=state.portfolio.categories.find(c=>c.id===cid);if(c)c.stocks[si][f]=v;}
@@ -1185,7 +1182,6 @@ function renderSectorEdit(){
               onkeydown="if(event.key==='Enter')this.blur()"/>
             <div class="ticker-status ticker-ok" id="sec-ts-${si}-${pi}">${p.fullName&&p.fullName!==p.ticker?'✓ '+p.fullName:''}</div>
           </div>
-          <div style="font-size:11px;color:var(--text2);padding-top:9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" id="sec-nm-${si}-${pi}">${p.fullName||''}</div>
           <button class="rm-btn" onclick="removePickEdit(${si},${pi})">−</button>
         </div>`).join('')}
       ${s.picks.length<3?`<button class="add-btn" onclick="addPickEdit(${si})" style="margin-top:4px">+ 종목 추가</button>`:''}
@@ -1193,11 +1189,9 @@ function renderSectorEdit(){
 }
 async function secTickerBlur(si, pi, inputEl) {
   const statusEl = document.getElementById(`sec-ts-${si}-${pi}`);
-  const nameEl   = document.getElementById(`sec-nm-${si}-${pi}`);
   await onTickerBlur(inputEl, statusEl, info => {
     SECTOR_LEADERS[si].picks[pi].ticker   = info.ticker;
     SECTOR_LEADERS[si].picks[pi].fullName = info.name;
-    if (nameEl) nameEl.textContent = info.name;
   });
 }
 function removeSectorEdit(si){
