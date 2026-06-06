@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-
+ 
 :root {
   --bg:#0a0a0f; --bg2:#111118; --bg3:#16161f;
   --card:#14141e; --card2:#1c1c28; --card3:#22222f;
@@ -27,7 +27,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;min-height:100vh;}
-
+ 
 /* HEADER */
 header{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100;}
 .logo{font-family:var(--disp);font-size:17px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;}
@@ -40,25 +40,25 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .btn-acc{background:var(--accent);border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;transition:opacity .2s;}
 .btn-acc:hover{opacity:.85;}
 .btn-acc.loading{opacity:.5;pointer-events:none;}
-
+ 
 main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
-
+ 
 /* SECTION TITLE */
 .stl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.4px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .stl::after{content:'';flex:1;height:1px;background:var(--border);}
-
+ 
 /* ALERT */
 .alert-bar{display:none;align-items:center;gap:12px;padding:12px 18px;background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.28);border-radius:12px;}
 .alert-bar.on{display:flex;}
 .a-ttl{font-weight:600;font-size:13px;color:var(--accent2);white-space:nowrap;}
 .a-tags{display:flex;flex-wrap:wrap;gap:6px;}
 .a-tag{background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.25);color:var(--accent2);padding:3px 10px;border-radius:6px;font-size:11px;font-weight:500;}
-
+ 
 /* REBALANCE ALERT */
 .reb-bar{display:none;align-items:center;gap:12px;padding:12px 18px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:12px;}
 .reb-bar.on{display:flex;}
 .reb-ttl{font-weight:600;font-size:13px;color:var(--amber);}
-
+ 
 /* GOAL TRACKER */
 .goal-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
 .goal-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
@@ -70,7 +70,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px;}
 .progress-bar{height:6px;background:var(--card3);border-radius:99px;overflow:hidden;}
 .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .6s ease;}
-
+ 
 /* INDEX CARDS */
 .idx-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
 .idx-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 18px;transition:border-color .2s;}
@@ -84,15 +84,15 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .vb1{background:rgba(245,158,11,.12);color:var(--amber);}
 .vb2{background:rgba(255,95,95,.12);color:var(--red);}
 .vb3{background:rgba(255,95,95,.22);color:var(--red);border:1px solid var(--red);}
-.chart-wrap{height:48px;margin-top:6px;}
-
+.chart-wrap{height:56px;margin-top:8px;}
+ 
 /* TWO COL */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
-
+ 
 /* CARD BASE */
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
-
+ 
 /* TABLES */
 .tbl{width:100%;border-collapse:collapse;font-size:13px;}
 .tbl thead tr{border-bottom:1px solid var(--border2);}
@@ -107,11 +107,21 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .sig-wait{color:var(--text3);font-size:11px;}
 .sig-watch{color:var(--amber);font-size:11px;font-weight:600;}
 .pos{color:var(--green);} .neg{color:var(--red);} .neu{color:var(--text3);}
-
+ 
+/* RANK BADGE */
+.rank-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:700;font-family:var(--mono);}
+.rank-1{background:rgba(255,200,0,.15);color:#ffc800;}
+.rank-2{background:rgba(180,180,200,.12);color:#b4b4c8;}
+.rank-3{background:rgba(205,120,60,.12);color:#cd783c;}
+.rank-n{background:var(--card3);color:var(--text3);}
+ 
 /* ENTRY PRICE INPUT */
 .ep-inp{background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);padding:4px 7px;font-size:12px;font-family:var(--mono);width:80px;outline:none;text-align:right;}
 .ep-inp:focus{border-color:var(--accent);}
-
+ 
+/* SECTOR RANK TABS */
+.sector-sub{font-size:10px;color:var(--text3);margin-left:4px;}
+ 
 /* PORTFOLIO */
 .pflio-body{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:start;}
 .donut-wrap{position:relative;width:150px;height:150px;}
@@ -128,7 +138,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .ptbl tr.tot-r td{padding:9px 6px 2px 0;font-weight:600;color:var(--text);border-top:1px solid var(--border2);border-bottom:none;font-family:var(--mono);}
 .ptbl tr:hover td{color:var(--text);}
 .cdot{width:6px;height:6px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle;}
-
+ 
 /* CHECKLIST */
 .chk-grp{margin-bottom:14px;}
 .chk-grp-t{font-size:12px;font-weight:600;color:var(--text);margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid var(--border);}
@@ -136,7 +146,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .chk-ic{font-size:13px;width:18px;text-align:center;}
 .chk-tx{flex:1;font-size:12px;}
 .chk-v{font-family:var(--mono);font-size:11px;color:var(--text3);}
-
+ 
 /* MODAL */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-ov.open{display:flex;}
@@ -157,7 +167,10 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .inp-l{display:block;font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;}
 .save-btn{background:var(--accent);border:none;color:#fff;border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:12px;transition:opacity .2s;}
 .save-btn:hover{opacity:.87;}
-
+ 
+/* MCAP TABLE */
+.mcap-rank{font-family:var(--mono);font-size:11px;color:var(--text3);width:24px;}
+ 
 /* RESPONSIVE */
 @media(max-width:1100px){.idx-row{grid-template-columns:1fr 1fr;}.two-col,.three-col{grid-template-columns:1fr;}.goal-row{grid-template-columns:1fr 1fr;}}
 @media(max-width:700px){
@@ -173,7 +186,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 </style>
 </head>
 <body data-theme="dark">
-
+ 
 <!-- PORTFOLIO MODAL -->
 <div class="modal-ov" id="pfModal">
 <div class="modal">
@@ -192,7 +205,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
   <button class="save-btn" onclick="savePortfolio()">💾 저장 및 적용</button>
 </div>
 </div>
-
+ 
 <!-- HEADER -->
 <header>
   <div class="logo"><div class="logo-pulse"></div>Live Fast Die Slow</div>
@@ -203,9 +216,9 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <button class="btn-acc" id="refreshBtn" onclick="refreshAll()">↻ 새로고침</button>
   </div>
 </header>
-
+ 
 <main>
-
+ 
 <!-- REBALANCE ALERT -->
 <div class="reb-bar" id="rebBar">
   <span style="font-size:18px">📅</span>
@@ -214,14 +227,14 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <div style="font-size:12px;color:var(--text2);margin-top:2px">포트폴리오 비중을 점검하고 목표 비중에 맞게 조정하세요.</div>
   </div>
 </div>
-
+ 
 <!-- BUY SIGNAL ALERT -->
 <div class="alert-bar" id="alertBar">
   <span style="font-size:18px">🔔</span>
   <span class="a-ttl">매수 신호 감지</span>
   <div class="a-tags" id="alertTags"></div>
 </div>
-
+ 
 <!-- MARKET INDICATORS -->
 <div>
   <div class="stl">시장 지표</div>
@@ -253,7 +266,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     </div>
   </div>
 </div>
-
+ 
 <!-- FX TABLE + CHECKLIST -->
 <div class="two-col">
   <div class="card">
@@ -270,20 +283,41 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
       </tbody>
     </table>
   </div>
-
+ 
   <div class="card">
     <div class="stl">매수 기준 체크리스트</div>
     <div id="chkList"></div>
   </div>
 </div>
-
-<!-- SECTOR TABLE -->
+ 
+<!-- US MARKET CAP TOP 10 -->
 <div class="card">
-  <div class="stl">섹터별 1위 — 진입가 vs 현재가</div>
+  <div class="stl">🏆 미국 시가총액 TOP 10</div>
+  <div style="overflow-x:auto">
+  <table class="tbl">
+    <thead><tr>
+      <th style="width:32px">#</th>
+      <th>종목</th>
+      <th class="r">현재가</th>
+      <th class="r">시가총액</th>
+      <th class="r">오늘 등락</th>
+      <th class="r">고점 대비</th>
+      <th class="r">MA20 대비</th>
+      <th style="width:100px">20일 추세</th>
+    </tr></thead>
+    <tbody id="mcapTbl"><tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">로딩 중...</td></tr></tbody>
+  </table>
+  </div>
+</div>
+ 
+<!-- SECTOR TABLE (Top 3) -->
+<div class="card">
+  <div class="stl">섹터별 주도주 TOP 3 — 진입가 vs 현재가</div>
   <div style="overflow-x:auto">
   <table class="tbl">
     <thead><tr>
       <th>섹터</th>
+      <th>#</th>
       <th>티커</th>
       <th class="r">현재가</th>
       <th class="r">MA20 대비</th>
@@ -298,7 +332,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
   </div>
   <div style="font-size:11px;color:var(--text3);margin-top:10px">💡 평균 매수가를 입력하면 수익률이 자동 계산됩니다. 입력값은 자동 저장됩니다.</div>
 </div>
-
+ 
 <!-- PORTFOLIO -->
 <div class="card">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -331,7 +365,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     </div>
   </div>
 </div>
-
+ 
 <!-- GOAL TRACKER -->
 <div class="goal-card">
   <div class="stl">🎯 목표 수익 추적 — 5,000만원</div>
@@ -366,23 +400,61 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
   </div>
 </div>
-
-
+ 
 </main>
-
+ 
 <script>
 // ─── CONSTANTS ───────────────────────────────────────────
-const REBALANCE_MONTHS = [1,4,7,10]; // Jan, Apr, Jul, Oct (1-indexed)
-
-const SECTOR_LEADERS = [
-  {id:'gpu',   name:'GPU',        color:'#6c63ff', ticker:'NVDA',  fullName:'Nvidia',      shares:5},
-  {id:'ai',    name:'AI General', color:'#22d3a5', ticker:'MSFT',  fullName:'Microsoft',   shares:3},
-  {id:'cpu',   name:'CPU',        color:'#38bdf8', ticker:'ARM',   fullName:'ARM Holdings',shares:10},
-  {id:'ar',    name:'AR Glasses', color:'#f59e0b', ticker:'META',  fullName:'Meta',        shares:4},
-  {id:'data',  name:'AI 데이터',   color:'#ff5f5f', ticker:'PLTR',  fullName:'Palantir',    shares:15},
-  {id:'robot', name:'로보틱스',    color:'#a78bfa', ticker:'ISRG',  fullName:'Intuitive Surgical', shares:2},
+const REBALANCE_MONTHS = [1,4,7,10];
+ 
+// US Market Cap Top 10 tickers (approximate, update periodically)
+const MCAP_TICKERS = [
+  {ticker:'AAPL',  name:'Apple',       sector:'기술'},
+  {ticker:'NVDA',  name:'Nvidia',      sector:'반도체'},
+  {ticker:'MSFT',  name:'Microsoft',   sector:'기술'},
+  {ticker:'AMZN',  name:'Amazon',      sector:'이커머스'},
+  {ticker:'GOOGL', name:'Alphabet',    sector:'광고/AI'},
+  {ticker:'META',  name:'Meta',        sector:'소셜/AR'},
+  {ticker:'TSLA',  name:'Tesla',       sector:'전기차'},
+  {ticker:'AVGO',  name:'Broadcom',    sector:'반도체'},
+  {ticker:'BRK-B', name:'Berkshire',   sector:'지주사'},
+  {ticker:'TSM',   name:'TSMC',        sector:'파운드리'},
 ];
-
+ 
+// Sector leaders: each sector has up to 3 ranked picks
+const SECTOR_LEADERS = [
+  {id:'gpu',   name:'GPU',       color:'#6c63ff', picks:[
+    {ticker:'NVDA',  fullName:'Nvidia',          shares:5},
+    {ticker:'AMD',   fullName:'AMD',             shares:8},
+    {ticker:'INTC',  fullName:'Intel',           shares:20},
+  ]},
+  {id:'ai',    name:'AI General',color:'#22d3a5', picks:[
+    {ticker:'MSFT',  fullName:'Microsoft',       shares:3},
+    {ticker:'GOOGL', fullName:'Alphabet',        shares:3},
+    {ticker:'AMZN',  fullName:'Amazon',          shares:2},
+  ]},
+  {id:'cpu',   name:'CPU/칩설계',color:'#38bdf8', picks:[
+    {ticker:'ARM',   fullName:'ARM Holdings',    shares:10},
+    {ticker:'QCOM',  fullName:'Qualcomm',        shares:8},
+    {ticker:'AVGO',  fullName:'Broadcom',        shares:3},
+  ]},
+  {id:'ar',    name:'AR/메타버스',color:'#f59e0b', picks:[
+    {ticker:'META',  fullName:'Meta',            shares:4},
+    {ticker:'AAPL',  fullName:'Apple',           shares:2},
+    {ticker:'SNAP',  fullName:'Snap',            shares:30},
+  ]},
+  {id:'data',  name:'AI 데이터', color:'#ff5f5f', picks:[
+    {ticker:'PLTR',  fullName:'Palantir',        shares:15},
+    {ticker:'S',     fullName:'SentinelOne',     shares:20},
+    {ticker:'MDB',   fullName:'MongoDB',         shares:5},
+  ]},
+  {id:'robot', name:'로보틱스',  color:'#a78bfa', picks:[
+    {ticker:'ISRG',  fullName:'Intuitive Surgical', shares:2},
+    {ticker:'ABB',   fullName:'ABB',             shares:10},
+    {ticker:'FANUY', fullName:'Fanuc',           shares:10},
+  ]},
+];
+ 
 const DEFAULT_PF = {
   cashUSD: 5000,
   cashKRW: 2000000,
@@ -414,58 +486,104 @@ const DEFAULT_PF = {
     ]},
   ]
 };
-
+ 
 let state = {
   vix:null, spy:null, qqq:null, kospi:null,
   fx:{USDKRW:1350, JPYKRW:900, EURKRW:1480, CNYKRW:186},
   sectors:{},
+  mcap:{},
   entryPrices: JSON.parse(localStorage.getItem('sigma_entry') || '{}'),
   entrySharesToRef: JSON.parse(localStorage.getItem('sigma_entryshares') || '{}'),
   portfolio: JSON.parse(localStorage.getItem('sigma_pf') || 'null') || DEFAULT_PF,
 };
 let charts = {};
-
+ 
 // ─── FETCH ───────────────────────────────────────────────
+// Yahoo Finance via allorigins CORS proxy (no API key needed)
+const YF_PROXY = 'https://query1.finance.yahoo.com/v8/finance/chart/';
+const CORS = url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+ 
+// Cache: avoid hammering same ticker twice in one refresh cycle
+const _cache = {};
+ 
 async function fetchYF(ticker) {
+  if (_cache[ticker]) return _cache[ticker];
   try {
-    const r = await fetch(`/api/finance?ticker=${encodeURIComponent(ticker)}`);
+    const yfUrl = `${YF_PROXY}${encodeURIComponent(ticker)}?interval=1d&range=3mo`;
+    const r = await fetch(CORS(yfUrl));
+    if (!r.ok) throw new Error(r.status);
     const d = await r.json();
     const res = d.chart?.result?.[0];
     if (!res) return null;
     const q = res.indicators?.quote?.[0];
-    const closes = (q?.close||[]).filter(v=>v!=null);
-    const current = res.meta?.regularMarketPrice || closes.at(-1);
-    const prev = res.meta?.previousClose || closes.at(-2) || current;
-    const high52 = res.meta?.fiftyTwoWeekHigh || Math.max(...closes);
-    const sl = closes.slice(-20);
-    const ma20 = sl.reduce((a,b)=>a+b,0)/sl.length;
-    return {
+    const timestamps = res.timestamp || [];
+    const rawCloses = q?.close || [];
+    // Filter nulls but keep index alignment with timestamps
+    const pairs = rawCloses.map((v,i)=>({v,ts:timestamps[i]})).filter(p=>p.v!=null);
+    const closes = pairs.map(p=>p.v);
+    const labels  = pairs.map(p=>{
+      const dt = new Date(p.ts*1000);
+      return `${dt.getMonth()+1}/${dt.getDate()}`;
+    });
+    const last20c = closes.slice(-20);
+    const last20l = labels.slice(-20);
+    const current = res.meta?.regularMarketPrice ?? closes.at(-1);
+    const prev    = res.meta?.previousClose     ?? closes.at(-2) ?? current;
+    const high52  = res.meta?.fiftyTwoWeekHigh  ?? Math.max(...closes);
+    const ma20    = last20c.reduce((a,b)=>a+b,0) / (last20c.length||1);
+    const marketCap = res.meta?.marketCap ?? null;
+    const result = {
       ticker, current, prev,
-      change: current-prev,
+      change:    current - prev,
       changePct: ((current-prev)/prev)*100,
       ma20, ma20Pct: ((current-ma20)/ma20)*100,
       high52, fromHigh: ((current-high52)/high52)*100,
-      closes: closes.slice(-20)
+      closes: last20c,
+      labels: last20l,
+      marketCap
     };
-  } catch { return null; }
+    _cache[ticker] = result;
+    return result;
+  } catch(e) {
+    console.warn('fetchYF failed:', ticker, e);
+    return null;
+  }
 }
-
+ 
 async function fetchFX() {
   try {
-    const r = await fetch('/api/finance?type=fx');
+    // Open Exchange Rates (free, no key for latest base USD)
+    const r = await fetch(CORS('https://open.er-api.com/v6/latest/USD'));
+    if (!r.ok) throw new Error(r.status);
     const d = await r.json();
-    const krw = d.rates?.KRW||1350;
-    return { USDKRW:krw, JPYKRW:(krw/(d.rates?.JPY||150))*100, EURKRW:krw/(d.rates?.EUR||0.92), CNYKRW:krw/(d.rates?.CNY||7.2) };
-  } catch { return state.fx; }
+    const rates = d.rates || {};
+    const krw = rates.KRW || 1350;
+    return {
+      USDKRW: krw,
+      JPYKRW: (krw / (rates.JPY || 150)) * 100,
+      EURKRW: krw / (rates.EUR || 0.92),
+      CNYKRW: krw / (rates.CNY || 7.2),
+    };
+  } catch(e) {
+    console.warn('fetchFX failed', e);
+    return state.fx;
+  }
 }
-
+ 
 // ─── UTILS ───────────────────────────────────────────────
 const f  = (n,d=2) => n==null||isNaN(n)?'—':n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 const fp = n => n==null||isNaN(n)?'—':`${n>=0?'+':''}${n.toFixed(2)}%`;
 const cc = n => n==null?'neu':n>0?'pos':n<0?'neg':'neu';
-
-// ─── SPARKLINE ───────────────────────────────────────────
-function drawSpark(id, closes, inv=false) {
+ 
+function fmtCap(v) {
+  if (!v) return '—';
+  if (v >= 1e12) return `$${(v/1e12).toFixed(2)}T`;
+  if (v >= 1e9)  return `$${(v/1e9).toFixed(1)}B`;
+  return `$${(v/1e6).toFixed(0)}M`;
+}
+ 
+// ─── SPARKLINE (with tooltip) ─────────────────────────────
+function drawSpark(id, closes, labels, inv=false, height=56) {
   if (!closes?.length) return;
   const ctx = document.getElementById(id)?.getContext('2d');
   if (!ctx) return;
@@ -473,27 +591,77 @@ function drawSpark(id, closes, inv=false) {
   const last=closes.at(-1), first=closes[0];
   const up = last>=first;
   const col = inv ? (up?'#ff5f5f':'#1fd4a0') : (up?'#1fd4a0':'#ff5f5f');
+  const lbl = labels || closes.map((_,i)=>`D-${closes.length-1-i}`);
   charts[id] = new Chart(ctx,{
     type:'line',
-    data:{labels:closes.map((_,i)=>i),datasets:[{data:closes,borderColor:col,borderWidth:1.5,pointRadius:0,tension:.4,fill:true,
-      backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,48);g.addColorStop(0,col+'30');g.addColorStop(1,col+'00');return g;}}]},
-    options:{responsive:true,maintainAspectRatio:false,animation:false,
-      plugins:{legend:{display:false},tooltip:{enabled:false}},
-      scales:{x:{display:false},y:{display:false}}}
+    data:{
+      labels: lbl,
+      datasets:[{
+        data:closes,
+        borderColor:col,
+        borderWidth:1.5,
+        pointRadius:0,
+        pointHoverRadius:4,
+        pointHoverBackgroundColor:col,
+        pointHoverBorderColor:'#fff',
+        pointHoverBorderWidth:1.5,
+        tension:.4,
+        fill:true,
+        backgroundColor:(c)=>{
+          const g=c.chart.ctx.createLinearGradient(0,0,0,height);
+          g.addColorStop(0,col+'30');
+          g.addColorStop(1,col+'00');
+          return g;
+        }
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          enabled:true,
+          backgroundColor:'rgba(10,10,20,0.88)',
+          borderColor:'rgba(255,255,255,0.12)',
+          borderWidth:1,
+          padding:{top:6,bottom:6,left:10,right:10},
+          titleColor:'#8a8aaa',
+          titleFont:{family:"'DM Mono',monospace",size:10},
+          bodyColor:'#e8e8f2',
+          bodyFont:{family:"'DM Mono',monospace",size:12,weight:'500'},
+          displayColors:false,
+          callbacks:{
+            title: items => items[0]?.label || '',
+            label: item => {
+              const v = item.raw;
+              return v != null ? (inv ? f(v,2) : '$'+f(v,2)) : '—';
+            }
+          }
+        }
+      },
+      scales:{x:{display:false},y:{display:false}}
+    }
   });
 }
-
+ 
+// Inline sparkline canvas for table cells
+function drawInlineSpark(id, closes, labels, inv=false) {
+  drawSpark(id, closes, labels, inv, 36);
+}
+ 
 // ─── REBALANCE CHECK ─────────────────────────────────────
 function checkRebalance() {
   const now = new Date();
   const m = now.getMonth()+1;
   const d = now.getDate();
-  // Show if within first 7 days of rebalance month
   if (REBALANCE_MONTHS.includes(m) && d <= 7) {
     document.getElementById('rebBar').classList.add('on');
   }
 }
-
+ 
 // ─── RENDER VIX / INDEX ──────────────────────────────────
 function renderVIX(d) {
   if (!d) return;
@@ -506,7 +674,7 @@ function renderVIX(d) {
   else if(v<25){b.textContent='⚡ 경계 (20–25)';b.className='vbadge vb1';}
   else if(v<35){b.textContent='🔥 공포 (25–35)';b.className='vbadge vb2';}
   else{b.textContent='🚨 극단 공포 (35+)';b.className='vbadge vb3';}
-  drawSpark('vixChart',d.closes,true);
+  drawSpark('vixChart',d.closes,d.labels,true);
 }
 function renderIdx(id,d,noPrefix=false) {
   if (!d) return;
@@ -515,19 +683,58 @@ function renderIdx(id,d,noPrefix=false) {
   const el=document.getElementById(`${id}Chg`);
   el.textContent=`${fp(d.changePct)} (${px}${f(Math.abs(d.change),noPrefix?0:2)})`;
   el.className=`idx-chg ${cc(d.changePct)}`;
-  drawSpark(`${id}Chart`,d.closes);
+  drawSpark(`${id}Chart`,d.closes,d.labels);
 }
 function renderFX(fx) {
   document.getElementById('fxUSD').textContent=f(fx.USDKRW,1);
   document.getElementById('fxJPY').textContent=f(fx.JPYKRW,2);
   document.getElementById('fxEUR').textContent=f(fx.EURKRW,1);
   document.getElementById('fxCNY').textContent=f(fx.CNYKRW,2);
-  // No prev FX data from free API, show dashes
   ['fxUSDch','fxJPYch','fxEURch','fxCNYch'].forEach(id=>{
     document.getElementById(id).textContent='—';
   });
 }
-
+ 
+// ─── MCAP TOP 10 ─────────────────────────────────────────
+function renderMcapTable(mcapData) {
+  // Sort by marketCap desc (fallback: current price * estimated shares)
+  const ranked = MCAP_TICKERS
+    .map(t => ({...t, d: mcapData[t.ticker]}))
+    .sort((a,b) => {
+      const ca = a.d?.marketCap || 0;
+      const cb = b.d?.marketCap || 0;
+      return cb - ca;
+    });
+ 
+  const rankBadgeClass = i => i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+ 
+  document.getElementById('mcapTbl').innerHTML = ranked.map((item, i) => {
+    const d = item.d;
+    const cid = `mcap-spark-${item.ticker}`;
+    return `<tr>
+      <td><span class="rank-badge ${rankBadgeClass(i)}">${i+1}</span></td>
+      <td>
+        <span style="color:var(--text);font-weight:500">${item.name}</span>
+        <span class="tmono" style="margin-left:6px;font-size:11px">${item.ticker}</span>
+        <span class="pill" style="background:var(--card3);color:var(--text3);margin-left:4px">${item.sector}</span>
+      </td>
+      <td class="r tmono">${d?'$'+f(d.current):'—'}</td>
+      <td class="r tmono" style="color:var(--text2)">${fmtCap(d?.marketCap)}</td>
+      <td class="r ${d?cc(d.changePct):'neu'}" style="font-family:var(--mono)">${d?fp(d.changePct):'—'}</td>
+      <td class="r ${d?cc(d.fromHigh):'neu'}" style="font-family:var(--mono)">${d?fp(d.fromHigh):'—'}</td>
+      <td class="r ${d?cc(d.ma20Pct):'neu'}" style="font-family:var(--mono)">${d?fp(d.ma20Pct):'—'}</td>
+      <td style="min-width:100px"><canvas id="${cid}" style="width:100%;height:36px"></canvas></td>
+    </tr>`;
+  }).join('');
+ 
+  // Draw sparklines after DOM update
+  setTimeout(()=>{
+    ranked.forEach(item=>{
+      if(item.d?.closes) drawInlineSpark(`mcap-spark-${item.ticker}`, item.d.closes, item.d.labels);
+    });
+  }, 50);
+}
+ 
 // ─── GOAL TRACKER ────────────────────────────────────────
 function renderGoal(totalKRW) {
   const p = state.portfolio;
@@ -539,7 +746,7 @@ function renderGoal(totalKRW) {
   const profitPct = (profitKRW/principalKRW)*100;
   const remain = goalKRW - Math.max(profitKRW,0);
   const goalPct = Math.min(Math.max((profitKRW/goalKRW)*100,0),100);
-
+ 
   document.getElementById('goalCurrent').textContent = `₩${(totalKRW/1e4).toFixed(0)}만`;
   document.getElementById('goalCurrentSub').textContent = `원금 ₩${principalMan.toLocaleString()}만원 기준`;
   document.getElementById('goalProfit').textContent = `${profitKRW>=0?'+':''}₩${(profitKRW/1e4).toFixed(0)}만`;
@@ -554,7 +761,7 @@ function renderGoal(totalKRW) {
   document.getElementById('progressLabel').textContent = `${goalPct.toFixed(1)}% 달성`;
   document.getElementById('progressGoal').textContent = `목표 +${goalMan.toLocaleString()}만원`;
 }
-
+ 
 // ─── CHECKLIST ───────────────────────────────────────────
 function renderChecklist() {
   const vix=state.vix?.current, spy=state.spy, qqq=state.qqq;
@@ -581,8 +788,8 @@ function renderChecklist() {
         </div>`).join('')}
     </div>`).join('');
 }
-
-// ─── SECTOR TABLE ─────────────────────────────────────────
+ 
+// ─── SECTOR TABLE (Top 3 per sector) ─────────────────────
 function getSig(d, type) {
   if (!d) return {txt:'—',cls:'sig-wait'};
   const vix=state.vix?.current, belowMA=d.ma20Pct<0, fhOk=d.fromHigh<=-10;
@@ -596,54 +803,73 @@ function getSig(d, type) {
   if(fhOk||belowMA) return {txt:'👀 관찰',cls:'sig-watch'};
   return {txt:'⏳ 대기',cls:'sig-wait'};
 }
-
+ 
+const RANK_LABELS = ['🥇 1위', '🥈 2위', '🥉 3위'];
+ 
 function renderSectorTable(sd) {
   const usdKrw = state.fx.USDKRW||1350;
   let alerts=[];
-  document.getElementById('sectorTbl').innerHTML = SECTOR_LEADERS.map(s=>{
-    const d=sd[s.ticker];
-    const sig=getSig(d,'theme');
-    if(sig.cls==='sig-buy') alerts.push(`${s.name}: ${s.ticker}`);
-    const ep = state.entryPrices[s.ticker]||'';
-    const epNum = parseFloat(ep)||0;
-    const shares = state.entrySharesToRef[s.ticker]||s.shares||1;
-    const ret = (d&&epNum>0) ? ((d.current-epNum)/epNum)*100 : null;
-    const gainUSD = (d&&epNum>0) ? (d.current-epNum)*shares : null;
-    const gainKRW = gainUSD!=null ? gainUSD*usdKrw : null;
-    return `<tr>
-      <td><span class="pill" style="background:${s.color}22;color:${s.color}">${s.name}</span></td>
-      <td><span class="tmono">${s.ticker}</span><br><span style="font-size:10px;color:var(--text3)">${s.fullName}</span></td>
-      <td class="r tmono">${d?'$'+f(d.current):'—'}</td>
-      <td class="r ${d?cc(d.ma20Pct):'neu'}" style="font-family:var(--mono)">${d?fp(d.ma20Pct):'—'}</td>
-      <td class="r ${d?cc(d.fromHigh):'neu'}" style="font-family:var(--mono)">${d?fp(d.fromHigh):'—'}</td>
-      <td class="r"><input class="ep-inp" type="number" placeholder="매수가" value="${ep}" onchange="saveEntry('${s.ticker}',this.value)" /></td>
-      <td class="r ${ret!=null?cc(ret):'neu'}" style="font-family:var(--mono);font-weight:500">${ret!=null?fp(ret):'—'}</td>
-      <td class="r ${gainKRW!=null?cc(gainKRW):'neu'}" style="font-family:var(--mono)">${gainKRW!=null?`${gainKRW>=0?'+':''}₩${(gainKRW/1e4).toFixed(1)}만`:'—'}</td>
-      <td class="${sig.cls}">${sig.txt}</td>
-    </tr>`;
-  }).join('');
-
+  let html='';
+ 
+  SECTOR_LEADERS.forEach(s => {
+    s.picks.forEach((pick, pi) => {
+      const d = sd[pick.ticker];
+      const sig = getSig(d, 'theme');
+      if(pi===0 && sig.cls==='sig-buy') alerts.push(`${s.name}: ${pick.ticker}`);
+ 
+      const ep = state.entryPrices[pick.ticker]||'';
+      const epNum = parseFloat(ep)||0;
+      const shares = state.entrySharesToRef[pick.ticker]||pick.shares||1;
+      const ret = (d&&epNum>0) ? ((d.current-epNum)/epNum)*100 : null;
+      const gainUSD = (d&&epNum>0) ? (d.current-epNum)*shares : null;
+      const gainKRW = gainUSD!=null ? gainUSD*usdKrw : null;
+      const rankBadge = RANK_LABELS[pi] || `${pi+1}위`;
+ 
+      // Show sector name only on first row, use rowspan visually via empty cells
+      const sectorCell = pi===0
+        ? `<td rowspan="${s.picks.length}" style="vertical-align:middle">
+             <span class="pill" style="background:${s.color}22;color:${s.color}">${s.name}</span>
+           </td>`
+        : '';
+ 
+      html += `<tr${pi===0?' style="border-top:1px solid var(--border2)"':''}>
+        ${sectorCell}
+        <td style="font-size:11px;color:var(--text3)">${rankBadge}</td>
+        <td><span class="tmono">${pick.ticker}</span><br><span style="font-size:10px;color:var(--text3)">${pick.fullName}</span></td>
+        <td class="r tmono">${d?'$'+f(d.current):'—'}</td>
+        <td class="r ${d?cc(d.ma20Pct):'neu'}" style="font-family:var(--mono)">${d?fp(d.ma20Pct):'—'}</td>
+        <td class="r ${d?cc(d.fromHigh):'neu'}" style="font-family:var(--mono)">${d?fp(d.fromHigh):'—'}</td>
+        <td class="r"><input class="ep-inp" type="number" placeholder="매수가" value="${ep}" onchange="saveEntry('${pick.ticker}',this.value)" /></td>
+        <td class="r ${ret!=null?cc(ret):'neu'}" style="font-family:var(--mono);font-weight:500">${ret!=null?fp(ret):'—'}</td>
+        <td class="r ${gainKRW!=null?cc(gainKRW):'neu'}" style="font-family:var(--mono)">${gainKRW!=null?`${gainKRW>=0?'+':''}₩${(gainKRW/1e4).toFixed(1)}만`:'—'}</td>
+        <td class="${sig.cls}">${sig.txt}</td>
+      </tr>`;
+    });
+  });
+ 
+  document.getElementById('sectorTbl').innerHTML = html;
+ 
   const bar=document.getElementById('alertBar'), tags=document.getElementById('alertTags');
   if(alerts.length){bar.classList.add('on');tags.innerHTML=alerts.map(a=>`<span class="a-tag">${a}</span>`).join('');}
   else bar.classList.remove('on');
 }
-
+ 
 function saveEntry(ticker, val) {
   state.entryPrices[ticker] = parseFloat(val)||0;
   localStorage.setItem('sigma_entry', JSON.stringify(state.entryPrices));
   renderSectorTable(state.sectors);
 }
-
+ 
 // ─── PORTFOLIO ────────────────────────────────────────────
 const CAT_COLORS = {index:'#6c63ff',theme:'#22d3a5',individual:'#38bdf8',wildcard:'#f59e0b',cash:'#555577'};
-
+ 
 async function renderPortfolio() {
   const p=state.portfolio, usdKrw=state.fx.USDKRW||1350;
   const allTickers=[...new Set(p.categories.flatMap(c=>c.stocks.map(s=>s.ticker)))];
   const results=await Promise.allSettled(allTickers.map(t=>fetchYF(t)));
   const pm={};
   allTickers.forEach((t,i)=>{if(results[i].status==='fulfilled'&&results[i].value)pm[t]=results[i].value;});
-
+ 
   let rows=[];
   for(const cat of p.categories){
     for(const s of cat.stocks){
@@ -656,11 +882,10 @@ async function renderPortfolio() {
       rows.push({...s,catId:cat.id,catLabel:cat.label,catColor:cat.color||CAT_COLORS[cat.id],totalKRW,priceUSD,d,retPct});
     }
   }
-
+ 
   const cashTotal=(p.cashUSD||0)*usdKrw+(p.cashKRW||0);
   const grandTotal=rows.reduce((s,r)=>s+r.totalKRW,0)+cashTotal;
-
-  // Donut
+ 
   const catMap={};
   for(const cat of p.categories) catMap[cat.id]=rows.filter(r=>r.catId===cat.id).reduce((s,r)=>s+r.totalKRW,0);
   catMap.cash=cashTotal;
@@ -670,11 +895,9 @@ async function renderPortfolio() {
   ].filter(d=>d.val>0);
   drawDonut(donutItems,grandTotal);
   document.getElementById('pfTotal').textContent=`총 자산 ₩${(grandTotal/1e4).toFixed(0)}만원 (약 $${(grandTotal/usdKrw/1e4).toFixed(1)}만)`;
-
-  // Goal tracker
+ 
   renderGoal(grandTotal);
-
-  // Table
+ 
   let html='';
   for(const cat of p.categories){
     const crows=rows.filter(r=>r.catId===cat.id);
@@ -700,7 +923,7 @@ async function renderPortfolio() {
   html+=`<tr class="tot-r"><td colspan="4" style="font-family:var(--sans);font-weight:700;color:var(--text);font-size:13px">합계</td><td>${(grandTotal/1e4).toFixed(1)}</td><td>100%</td><td>—</td></tr>`;
   document.getElementById('pfTblBody').innerHTML=html;
 }
-
+ 
 function drawDonut(items,total){
   const svg=document.getElementById('donutSvg');
   svg.innerHTML='';
@@ -723,7 +946,7 @@ function drawDonut(items,total){
   });
   document.getElementById('donutN').textContent=`₩${(total/1e4).toFixed(0)}만`;
 }
-
+ 
 // ─── MODAL ───────────────────────────────────────────────
 function openModal(){
   const p=state.portfolio;
@@ -763,11 +986,12 @@ function savePortfolio(){
   closeModal();
   renderPortfolio();
 }
-
+ 
 function toggleTheme(){document.body.dataset.theme=document.body.dataset.theme==='dark'?'light':'dark';}
-
+ 
 // ─── MAIN REFRESH ────────────────────────────────────────
 async function refreshAll(){
+  Object.keys(_cache).forEach(k => delete _cache[k]);
   const btn=document.getElementById('refreshBtn');
   btn.classList.add('loading'); btn.textContent='⟳ 업데이트 중...';
   try {
@@ -782,19 +1006,30 @@ async function refreshAll(){
     renderIdx('kospi',kospi,true);
     renderFX(fx);
     renderChecklist();
-
-    const tickers=SECTOR_LEADERS.map(s=>s.ticker);
-    const res=await Promise.allSettled(tickers.map(t=>fetchYF(t)));
-    const sd={};
-    tickers.forEach((t,i)=>{if(res[i].status==='fulfilled'&&res[i].value)sd[t]=res[i].value;});
-    state.sectors=sd;
-    renderSectorTable(sd);
+ 
+    // Collect all unique tickers: sector leaders + mcap top 10
+    const sectorTickers = [...new Set(SECTOR_LEADERS.flatMap(s=>s.picks.map(p=>p.ticker)))];
+    const mcapTickerList = MCAP_TICKERS.map(t=>t.ticker);
+    const allUnique = [...new Set([...sectorTickers, ...mcapTickerList])];
+ 
+    const res = await Promise.allSettled(allUnique.map(t=>fetchYF(t)));
+    const dataMap = {};
+    allUnique.forEach((t,i)=>{if(res[i].status==='fulfilled'&&res[i].value) dataMap[t]=res[i].value;});
+ 
+    // Sector table
+    state.sectors = dataMap;
+    renderSectorTable(dataMap);
+ 
+    // Mcap table
+    state.mcap = dataMap;
+    renderMcapTable(dataMap);
+ 
     await renderPortfolio();
     document.getElementById('updTxt').textContent=`업데이트: ${new Date().toLocaleTimeString('ko-KR')}`;
   } catch(e){console.error(e);}
   btn.classList.remove('loading'); btn.textContent='↻ 새로고침';
 }
-
+ 
 refreshAll();
 setInterval(refreshAll,5*60*1000);
 </script>
