@@ -671,14 +671,14 @@ function fmtCap(v) {
 }
 
 // ─── SPARKLINE (with tooltip) ─────────────────────────────
-function drawSpark(id, closes, labels, inv=false, height=56) {
+function drawSpark(id, closes, labels, inv=false, height=56, todayUp=null) {
   if (!closes?.length) return;
   const ctx = document.getElementById(id)?.getContext('2d');
   if (!ctx) return;
   if (charts[id]) charts[id].destroy();
-  const last=closes.at(-1), first=closes[0];
-  const up = last>=first;
-  const col = inv ? (up?'#ff5f5f':'#1fd4a0') : (up?'#1fd4a0':'#ff5f5f');
+  // todayUp: 오늘 등락 기준. null이면 20일 전체 추세 기준(기존 방식)
+  const trendUp = todayUp !== null ? todayUp : closes.at(-1) >= closes[0];
+  const col = inv ? (trendUp?'#ff5f5f':'#1fd4a0') : (trendUp?'#1fd4a0':'#ff5f5f');
   const lbl = labels || closes.map((_,i)=>`D-${closes.length-1-i}`);
   charts[id] = new Chart(ctx,{
     type:'line',
@@ -758,7 +758,7 @@ function renderVIX(d) {
   else if(v<25){b.textContent='⚡ 경계 (20–25)';b.className='vbadge vb1';}
   else if(v<35){b.textContent='🔥 공포 (25–35)';b.className='vbadge vb2';}
   else{b.textContent='🚨 극단 공포 (35+)';b.className='vbadge vb3';}
-  drawSpark('vixChart',d.closes,d.labels,true);
+  drawSpark('vixChart',d.closes,d.labels,true,56, d.changePct>=0);
 }
 function renderIdx(id,d,noPrefix=false) {
   if (!d) return;
@@ -767,7 +767,7 @@ function renderIdx(id,d,noPrefix=false) {
   const el=document.getElementById(`${id}Chg`);
   el.textContent=`${fp(d.changePct)} (${px}${f(Math.abs(d.change),noPrefix?0:2)})`;
   el.className=`idx-chg ${cc(d.changePct)}`;
-  drawSpark(`${id}Chart`,d.closes,d.labels);
+  drawSpark(`${id}Chart`,d.closes,d.labels,false,56, d.changePct>=0);
 }
 function renderFX(fx) {
   document.getElementById('fxUSD').textContent=f(fx.USDKRW,1);
