@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
- 
+
 :root {
   --bg:#0a0a0f; --bg2:#111118; --bg3:#16161f;
   --card:#14141e; --card2:#1c1c28; --card3:#22222f;
@@ -27,7 +27,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;min-height:100vh;}
- 
+
 /* HEADER */
 header{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100;}
 .logo{font-family:var(--disp);font-size:17px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;}
@@ -40,25 +40,25 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 .btn-acc{background:var(--accent);border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;transition:opacity .2s;}
 .btn-acc:hover{opacity:.85;}
 .btn-acc.loading{opacity:.5;pointer-events:none;}
- 
+
 main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
- 
+
 /* SECTION TITLE */
 .stl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.4px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .stl::after{content:'';flex:1;height:1px;background:var(--border);}
- 
+
 /* ALERT */
 .alert-bar{display:none;align-items:center;gap:12px;padding:12px 18px;background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.28);border-radius:12px;}
 .alert-bar.on{display:flex;}
 .a-ttl{font-weight:600;font-size:13px;color:var(--accent2);white-space:nowrap;}
 .a-tags{display:flex;flex-wrap:wrap;gap:6px;}
 .a-tag{background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.25);color:var(--accent2);padding:3px 10px;border-radius:6px;font-size:11px;font-weight:500;}
- 
+
 /* REBALANCE ALERT */
 .reb-bar{display:none;align-items:center;gap:12px;padding:12px 18px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:12px;}
 .reb-bar.on{display:flex;}
 .reb-ttl{font-weight:600;font-size:13px;color:var(--amber);}
- 
+
 /* GOAL TRACKER */
 .goal-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
 .goal-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
@@ -70,7 +70,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px;}
 .progress-bar{height:6px;background:var(--card3);border-radius:99px;overflow:hidden;}
 .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .6s ease;}
- 
+
 /* INDEX CARDS */
 .idx-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
 .idx-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 18px;transition:border-color .2s;}
@@ -85,14 +85,14 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .vb2{background:rgba(255,95,95,.12);color:var(--red);}
 .vb3{background:rgba(255,95,95,.22);color:var(--red);border:1px solid var(--red);}
 .chart-wrap{height:56px;margin-top:8px;}
- 
+
 /* TWO COL */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
- 
+
 /* CARD BASE */
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
- 
+
 /* TABLES */
 .tbl{width:100%;border-collapse:collapse;font-size:13px;}
 .tbl thead tr{border-bottom:1px solid var(--border2);}
@@ -107,21 +107,21 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .sig-wait{color:var(--text3);font-size:11px;}
 .sig-watch{color:var(--amber);font-size:11px;font-weight:600;}
 .pos{color:var(--green);} .neg{color:var(--red);} .neu{color:var(--text3);}
- 
+
 /* RANK BADGE */
 .rank-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:700;font-family:var(--mono);}
 .rank-1{background:rgba(255,200,0,.15);color:#ffc800;}
 .rank-2{background:rgba(180,180,200,.12);color:#b4b4c8;}
 .rank-3{background:rgba(205,120,60,.12);color:#cd783c;}
 .rank-n{background:var(--card3);color:var(--text3);}
- 
+
 /* ENTRY PRICE INPUT */
 .ep-inp{background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);padding:4px 7px;font-size:12px;font-family:var(--mono);width:80px;outline:none;text-align:right;}
 .ep-inp:focus{border-color:var(--accent);}
- 
+
 /* SECTOR RANK TABS */
 .sector-sub{font-size:10px;color:var(--text3);margin-left:4px;}
- 
+
 /* PORTFOLIO */
 .pflio-body{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:start;}
 .donut-wrap{position:relative;width:150px;height:150px;}
@@ -138,7 +138,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .ptbl tr.tot-r td{padding:9px 6px 2px 0;font-weight:600;color:var(--text);border-top:1px solid var(--border2);border-bottom:none;font-family:var(--mono);}
 .ptbl tr:hover td{color:var(--text);}
 .cdot{width:6px;height:6px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle;}
- 
+
 /* CHECKLIST */
 .chk-grp{margin-bottom:14px;}
 .chk-grp-t{font-size:12px;font-weight:600;color:var(--text);margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid var(--border);}
@@ -146,7 +146,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .chk-ic{font-size:13px;width:18px;text-align:center;}
 .chk-tx{flex:1;font-size:12px;}
 .chk-v{font-family:var(--mono);font-size:11px;color:var(--text3);}
- 
+
 /* MODAL */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-ov.open{display:flex;}
@@ -167,10 +167,10 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .inp-l{display:block;font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;}
 .save-btn{background:var(--accent);border:none;color:#fff;border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:12px;transition:opacity .2s;}
 .save-btn:hover{opacity:.87;}
- 
+
 /* MCAP TABLE */
 .mcap-rank{font-family:var(--mono);font-size:11px;color:var(--text3);width:24px;}
- 
+
 /* MODAL TABS */
 .m-tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--card2);border-radius:10px;padding:4px;}
 .m-tab{flex:1;padding:7px;border:none;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);background:none;transition:all .18s;}
@@ -185,7 +185,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .sector-inp-name{font-size:12px;font-weight:600;color:var(--text);}
 .pick-row{display:grid;grid-template-columns:32px 1fr 1fr 36px;gap:6px;align-items:center;margin-bottom:5px;}
 .pick-rank-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);text-align:center;}
- 
+
 /* TICKER LOOKUP */
 .ticker-wrap{position:relative;}
 .ticker-status{font-size:10px;margin-top:3px;padding:0 2px;min-height:14px;transition:color .2s;}
@@ -196,7 +196,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .pf-row{display:grid;grid-template-columns:1fr 65px 36px;gap:7px;margin-bottom:10px;align-items:start;}
 /* 섹터 pick행: 순위 | 티커 | 이름(자동) | 삭제 */
 .pick-row{display:grid;grid-template-columns:32px 1fr 36px;gap:6px;align-items:start;margin-bottom:6px;}
- 
+
 /* RESPONSIVE */
 @media(max-width:1100px){.idx-row{grid-template-columns:1fr 1fr;}.two-col,.three-col{grid-template-columns:1fr;}.goal-row{grid-template-columns:1fr 1fr;}}
 @media(max-width:700px){
@@ -212,19 +212,19 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 </style>
 </head>
 <body data-theme="dark">
- 
+
 <!-- PORTFOLIO MODAL -->
 <div class="modal-ov" id="pfModal">
 <div class="modal">
   <div class="modal-t">대시보드 편집 <button class="mcls" onclick="closeModal()">✕</button></div>
- 
+
   <!-- TABS -->
   <div class="m-tabs">
     <button class="m-tab active" onclick="switchTab('pf',this)">💼 포트폴리오</button>
     <button class="m-tab" onclick="switchTab('mcap',this)">🏆 시총 TOP 10</button>
     <button class="m-tab" onclick="switchTab('sector',this)">📊 섹터별 TOP 3</button>
   </div>
- 
+
   <!-- TAB: 포트폴리오 -->
   <div class="m-tab-panel active" id="tab-pf">
     <div class="ms-ttl">💵 현금 버퍼</div>
@@ -240,14 +240,14 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <div id="modal-cats"></div>
     <button class="save-btn" onclick="savePortfolio()">💾 저장 및 적용</button>
   </div>
- 
+
   <!-- TAB: 시총 TOP 10 -->
   <div class="m-tab-panel" id="tab-mcap">
     <div style="font-size:12px;color:var(--text2);margin-bottom:14px">순서대로 1~10위. 티커만 입력하면 됩니다 (대문자).</div>
     <div id="mcap-edit-list"></div>
     <button class="save-btn" onclick="saveMcap()">💾 저장 및 적용</button>
   </div>
- 
+
   <!-- TAB: 섹터별 TOP 3 -->
   <div class="m-tab-panel" id="tab-sector">
     <div style="font-size:12px;color:var(--text2);margin-bottom:14px">섹터명과 1~3위 티커를 입력하세요.</div>
@@ -257,7 +257,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
   </div>
 </div>
 </div>
- 
+
 <!-- HEADER -->
 <header>
   <div class="logo"><div class="logo-pulse"></div>Live Fast Die Slow</div>
@@ -268,9 +268,9 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <button class="btn-acc" id="refreshBtn" onclick="refreshAll()">↻ 새로고침</button>
   </div>
 </header>
- 
+
 <main>
- 
+
 <!-- REBALANCE ALERT -->
 <div class="reb-bar" id="rebBar">
   <span style="font-size:18px">📅</span>
@@ -279,14 +279,14 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <div style="font-size:12px;color:var(--text2);margin-top:2px">포트폴리오 비중을 점검하고 목표 비중에 맞게 조정하세요.</div>
   </div>
 </div>
- 
+
 <!-- BUY SIGNAL ALERT -->
 <div class="alert-bar" id="alertBar">
   <span style="font-size:18px">🔔</span>
   <span class="a-ttl">매수 신호 감지</span>
   <div class="a-tags" id="alertTags"></div>
 </div>
- 
+
 <!-- MARKET INDICATORS -->
 <div>
   <div class="stl">시장 지표</div>
@@ -318,7 +318,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     </div>
   </div>
 </div>
- 
+
 <!-- FX TABLE + CHECKLIST -->
 <div class="two-col">
   <div class="card">
@@ -335,13 +335,13 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
       </tbody>
     </table>
   </div>
- 
+
   <div class="card">
     <div class="stl">매수 기준 체크리스트</div>
     <div id="chkList"></div>
   </div>
 </div>
- 
+
 <!-- US MARKET CAP TOP 10 -->
 <div class="card">
   <div class="stl">🏆 미국 시가총액 TOP 10</div>
@@ -355,13 +355,13 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
       <th class="r">오늘 등락</th>
       <th class="r">고점 대비</th>
       <th class="r">MA20 대비</th>
- 
+
     </tr></thead>
     <tbody id="mcapTbl"><tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">로딩 중...</td></tr></tbody>
   </table>
   </div>
 </div>
- 
+
 <!-- SECTOR TABLE (Top 3) -->
 <div class="card">
   <div class="stl">섹터별 주도주 TOP 3 — 진입가 vs 현재가</div>
@@ -384,7 +384,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
   </div>
   <div style="font-size:11px;color:var(--text3);margin-top:10px">💡 평균 매수가를 입력하면 수익률이 자동 계산됩니다. 입력값은 자동 저장됩니다.</div>
 </div>
- 
+
 <!-- PORTFOLIO -->
 <div class="card">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -417,7 +417,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     </div>
   </div>
 </div>
- 
+
 <!-- GOAL TRACKER -->
 <div class="goal-card">
   <div class="stl">🎯 목표 수익 추적 — 5,000만원</div>
@@ -452,13 +452,13 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
   </div>
 </div>
- 
+
 </main>
- 
+
 <script>
 // ─── CONSTANTS ───────────────────────────────────────────
 const REBALANCE_MONTHS = [1,4,7,10];
- 
+
 // US Market Cap Top 10 tickers (approximate, update periodically)
 // 2026.06 기준 미국 시총 순위 (수동 업데이트 필요 시 여기만 수정)
 const MCAP_TICKERS = [
@@ -473,7 +473,7 @@ const MCAP_TICKERS = [
   {ticker:'BRK-B', name:'Berkshire',   sector:'지주사'},   // 9위
   {ticker:'TSM',   name:'TSMC',        sector:'파운드리'}, // 10위
 ];
- 
+
 // Sector leaders: each sector has up to 3 ranked picks
 const SECTOR_LEADERS = [
   {id:'gpu',   name:'GPU',       color:'#6c63ff', picks:[
@@ -503,11 +503,11 @@ const SECTOR_LEADERS = [
   ]},
   {id:'robot', name:'로보틱스',  color:'#a78bfa', picks:[
     {ticker:'ISRG',  fullName:'Intuitive Surgical', shares:2},
-    {ticker:'ABB',   fullName:'ABB',             shares:10},
-    {ticker:'FANUY', fullName:'Fanuc',           shares:10},
+    {ticker:'ABBNY', fullName:'ABB (ADR)',        shares:10},
+    {ticker:'FANUY', fullName:'Fanuc (ADR)',      shares:10},
   ]},
 ];
- 
+
 const DEFAULT_PF = {
   cashUSD: 5000,
   cashKRW: 2000000,
@@ -539,7 +539,7 @@ const DEFAULT_PF = {
     ]},
   ]
 };
- 
+
 let state = {
   vix:null, spy:null, qqq:null, kospi:null,
   fx:{USDKRW:1350, JPYKRW:900, EURKRW:1480, CNYKRW:186},
@@ -550,7 +550,7 @@ let state = {
   portfolio: DEFAULT_PF,
 };
 let charts = {};
- 
+
 // ─── KV STORAGE (기기 간 동기화) ──────────────────────────
 async function kvGet(key) {
   try {
@@ -559,7 +559,7 @@ async function kvGet(key) {
     return d.value ?? null;
   } catch { return null; }
 }
- 
+
 async function kvSet(key, value) {
   try {
     await fetch(`/api/settings?key=${key}`, {
@@ -569,27 +569,32 @@ async function kvSet(key, value) {
     });
   } catch(e) { console.warn('kvSet failed', key, e); }
 }
- 
+
 // 앱 시작 시 KV에서 설정 로드
 async function loadSettings() {
-  const [pf, mcap, sectors, entry] = await Promise.all([
-    kvGet('sigma_pf'),
-    kvGet('sigma_mcap'),
-    kvGet('sigma_sectors'),
-    kvGet('sigma_entry'),
-  ]);
-  if (pf)      state.portfolio = pf;
-  if (mcap)    { MCAP_TICKERS.length=0;    mcap.forEach(t=>MCAP_TICKERS.push(t)); }
-  if (sectors) { SECTOR_LEADERS.length=0;  sectors.forEach(s=>SECTOR_LEADERS.push(s)); }
-  if (entry)   state.entryPrices = entry;
+  try {
+    const [pf, mcap, sectors, entry] = await Promise.all([
+      kvGet('sigma_pf'),
+      kvGet('sigma_mcap'),
+      kvGet('sigma_sectors'),
+      kvGet('sigma_entry'),
+    ]);
+    // categories 검증 후 적용 (없으면 DEFAULT_PF 유지)
+    if (pf?.categories?.length) state.portfolio = pf;
+    if (Array.isArray(mcap) && mcap.length)    { MCAP_TICKERS.length=0;   mcap.forEach(t=>MCAP_TICKERS.push(t)); }
+    if (Array.isArray(sectors) && sectors.length) { SECTOR_LEADERS.length=0; sectors.forEach(s=>SECTOR_LEADERS.push(s)); }
+    if (entry && typeof entry === 'object')     state.entryPrices = entry;
+  } catch(e) {
+    console.warn('loadSettings failed, using defaults', e);
+  }
 }
- 
+
 // ─── FETCH ───────────────────────────────────────────────
 // /api/finance → Vercel serverless proxy → Yahoo Finance
 // (api/finance.js 가 CORS 헤더 및 UA 처리)
- 
+
 const _cache = {};
- 
+
 async function fetchYF(ticker) {
   if (_cache[ticker]) return _cache[ticker];
   try {
@@ -632,7 +637,7 @@ async function fetchYF(ticker) {
     return null;
   }
 }
- 
+
 async function fetchFX() {
   try {
     const r = await fetch('/api/finance?type=fx');
@@ -652,19 +657,19 @@ async function fetchFX() {
     return state.fx;
   }
 }
- 
+
 // ─── UTILS ───────────────────────────────────────────────
 const f  = (n,d=2) => n==null||isNaN(n)?'—':n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 const fp = n => n==null||isNaN(n)?'—':`${n>=0?'+':''}${n.toFixed(2)}%`;
 const cc = n => n==null?'neu':n>0?'pos':n<0?'neg':'neu';
- 
+
 function fmtCap(v) {
   if (!v) return '—';
   if (v >= 1e12) return `$${(v/1e12).toFixed(2)}T`;
   if (v >= 1e9)  return `$${(v/1e9).toFixed(1)}B`;
   return `$${(v/1e6).toFixed(0)}M`;
 }
- 
+
 // ─── SPARKLINE (with tooltip) ─────────────────────────────
 function drawSpark(id, closes, labels, inv=false, height=56) {
   if (!closes?.length) return;
@@ -729,8 +734,8 @@ function drawSpark(id, closes, labels, inv=false, height=56) {
     }
   });
 }
- 
- 
+
+
 // ─── REBALANCE CHECK ─────────────────────────────────────
 function checkRebalance() {
   const now = new Date();
@@ -740,7 +745,7 @@ function checkRebalance() {
     document.getElementById('rebBar').classList.add('on');
   }
 }
- 
+
 // ─── RENDER VIX / INDEX ──────────────────────────────────
 function renderVIX(d) {
   if (!d) return;
@@ -773,7 +778,7 @@ function renderFX(fx) {
     document.getElementById(id).textContent='—';
   });
 }
- 
+
 // ─── MCAP TOP 10 ─────────────────────────────────────────
 function renderMcapTable(mcapData) {
   // Sort by marketCap desc (fallback: current price * estimated shares)
@@ -784,9 +789,9 @@ function renderMcapTable(mcapData) {
       const cb = b.d?.marketCap || 0;
       return cb - ca;
     });
- 
+
   const rankBadgeClass = i => i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
- 
+
   document.getElementById('mcapTbl').innerHTML = ranked.map((item, i) => {
     const d = item.d;
     return `<tr>
@@ -804,7 +809,7 @@ function renderMcapTable(mcapData) {
     </tr>`;
   }).join('');
 }
- 
+
 // ─── GOAL TRACKER ────────────────────────────────────────
 function renderGoal(totalKRW) {
   const p = state.portfolio;
@@ -816,7 +821,7 @@ function renderGoal(totalKRW) {
   const profitPct = (profitKRW/principalKRW)*100;
   const remain = goalKRW - Math.max(profitKRW,0);
   const goalPct = Math.min(Math.max((profitKRW/goalKRW)*100,0),100);
- 
+
   document.getElementById('goalCurrent').textContent = `₩${(totalKRW/1e4).toFixed(0)}만`;
   document.getElementById('goalCurrentSub').textContent = `원금 ₩${principalMan.toLocaleString()}만원 기준`;
   document.getElementById('goalProfit').textContent = `${profitKRW>=0?'+':''}₩${(profitKRW/1e4).toFixed(0)}만`;
@@ -831,7 +836,7 @@ function renderGoal(totalKRW) {
   document.getElementById('progressLabel').textContent = `${goalPct.toFixed(1)}% 달성`;
   document.getElementById('progressGoal').textContent = `목표 +${goalMan.toLocaleString()}만원`;
 }
- 
+
 // ─── CHECKLIST ───────────────────────────────────────────
 function renderChecklist() {
   const vix=state.vix?.current, spy=state.spy, qqq=state.qqq;
@@ -858,7 +863,7 @@ function renderChecklist() {
         </div>`).join('')}
     </div>`).join('');
 }
- 
+
 // ─── SECTOR TABLE (Top 3 per sector) ─────────────────────
 function getSig(d, type) {
   if (!d) return {txt:'—',cls:'sig-wait'};
@@ -873,20 +878,20 @@ function getSig(d, type) {
   if(fhOk||belowMA) return {txt:'👀 관찰',cls:'sig-watch'};
   return {txt:'⏳ 대기',cls:'sig-wait'};
 }
- 
+
 const RANK_LABELS = ['🥇 1위', '🥈 2위', '🥉 3위'];
- 
+
 function renderSectorTable(sd) {
   const usdKrw = state.fx.USDKRW||1350;
   let alerts=[];
   let html='';
- 
+
   SECTOR_LEADERS.forEach(s => {
     s.picks.forEach((pick, pi) => {
       const d = sd[pick.ticker];
       const sig = getSig(d, 'theme');
       if(pi===0 && sig.cls==='sig-buy') alerts.push(`${s.name}: ${pick.ticker}`);
- 
+
       const ep = state.entryPrices[pick.ticker]||'';
       const epNum = parseFloat(ep)||0;
       const shares = state.entrySharesToRef[pick.ticker]||pick.shares||1;
@@ -894,14 +899,14 @@ function renderSectorTable(sd) {
       const gainUSD = (d&&epNum>0) ? (d.current-epNum)*shares : null;
       const gainKRW = gainUSD!=null ? gainUSD*usdKrw : null;
       const rankBadge = RANK_LABELS[pi] || `${pi+1}위`;
- 
+
       // Show sector name only on first row, use rowspan visually via empty cells
       const sectorCell = pi===0
         ? `<td rowspan="${s.picks.length}" style="vertical-align:middle">
              <span class="pill" style="background:${s.color}22;color:${s.color}">${s.name}</span>
            </td>`
         : '';
- 
+
       html += `<tr${pi===0?' style="border-top:1px solid var(--border2)"':''}>
         ${sectorCell}
         <td style="font-size:11px;color:var(--text3)">${rankBadge}</td>
@@ -916,30 +921,30 @@ function renderSectorTable(sd) {
       </tr>`;
     });
   });
- 
+
   document.getElementById('sectorTbl').innerHTML = html;
- 
+
   const bar=document.getElementById('alertBar'), tags=document.getElementById('alertTags');
   if(alerts.length){bar.classList.add('on');tags.innerHTML=alerts.map(a=>`<span class="a-tag">${a}</span>`).join('');}
   else bar.classList.remove('on');
 }
- 
+
 function saveEntry(ticker, val) {
   state.entryPrices[ticker] = parseFloat(val)||0;
   kvSet('sigma_entry', state.entryPrices);
   renderSectorTable(state.sectors);
 }
- 
+
 // ─── PORTFOLIO ────────────────────────────────────────────
 const CAT_COLORS = {index:'#6c63ff',theme:'#22d3a5',individual:'#38bdf8',wildcard:'#f59e0b',cash:'#555577'};
- 
+
 async function renderPortfolio() {
   const p=state.portfolio, usdKrw=state.fx.USDKRW||1350;
   const allTickers=[...new Set(p.categories.flatMap(c=>c.stocks.map(s=>s.ticker)))];
   const results=await Promise.allSettled(allTickers.map(t=>fetchYF(t)));
   const pm={};
   allTickers.forEach((t,i)=>{if(results[i].status==='fulfilled'&&results[i].value)pm[t]=results[i].value;});
- 
+
   let rows=[];
   for(const cat of p.categories){
     for(const s of cat.stocks){
@@ -952,10 +957,10 @@ async function renderPortfolio() {
       rows.push({...s,catId:cat.id,catLabel:cat.label,catColor:cat.color||CAT_COLORS[cat.id],totalKRW,priceUSD,d,retPct});
     }
   }
- 
+
   const cashTotal=(p.cashUSD||0)*usdKrw+(p.cashKRW||0);
   const grandTotal=rows.reduce((s,r)=>s+r.totalKRW,0)+cashTotal;
- 
+
   const catMap={};
   for(const cat of p.categories) catMap[cat.id]=rows.filter(r=>r.catId===cat.id).reduce((s,r)=>s+r.totalKRW,0);
   catMap.cash=cashTotal;
@@ -965,9 +970,9 @@ async function renderPortfolio() {
   ].filter(d=>d.val>0);
   drawDonut(donutItems,grandTotal);
   document.getElementById('pfTotal').textContent=`총 자산 ₩${(grandTotal/1e4).toFixed(0)}만원 (약 $${(grandTotal/usdKrw/1e4).toFixed(1)}만)`;
- 
+
   renderGoal(grandTotal);
- 
+
   let html='';
   for(const cat of p.categories){
     const crows=rows.filter(r=>r.catId===cat.id);
@@ -993,7 +998,7 @@ async function renderPortfolio() {
   html+=`<tr class="tot-r"><td colspan="4" style="font-family:var(--sans);font-weight:700;color:var(--text);font-size:13px">합계</td><td>${(grandTotal/1e4).toFixed(1)}</td><td>100%</td><td>—</td></tr>`;
   document.getElementById('pfTblBody').innerHTML=html;
 }
- 
+
 function drawDonut(items,total){
   const svg=document.getElementById('donutSvg');
   svg.innerHTML='';
@@ -1016,7 +1021,7 @@ function drawDonut(items,total){
   });
   document.getElementById('donutN').textContent=`₩${(total/1e4).toFixed(0)}만`;
 }
- 
+
 // ─── MODAL ───────────────────────────────────────────────
 function switchTab(id, btn) {
   document.querySelectorAll('.m-tab-panel').forEach(p=>p.classList.remove('active'));
@@ -1024,7 +1029,7 @@ function switchTab(id, btn) {
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
 }
- 
+
 function openModal(){
   const p=state.portfolio;
   document.getElementById('cashUSD').value=p.cashUSD||0;
@@ -1042,7 +1047,7 @@ function openModal(){
   document.getElementById('pfModal').classList.add('open');
 }
 function closeModal(){document.getElementById('pfModal').classList.remove('open');}
- 
+
 // ── 공통: 티커 → 종목명 자동조회 ──────────────────────────
 // lookupCache: 세션 중 반복 fetch 방지
 const _lookupCache = {};
@@ -1065,7 +1070,7 @@ async function lookupTicker(ticker) {
     return info;
   } catch { return null; }
 }
- 
+
 // 티커 입력 → blur 시 자동 조회 & 상태 표시
 async function onTickerBlur(inputEl, statusEl, onSuccess) {
   const t = inputEl.value.trim().toUpperCase();
@@ -1083,7 +1088,7 @@ async function onTickerBlur(inputEl, statusEl, onSuccess) {
     statusEl.className = 'ticker-status ticker-err';
   }
 }
- 
+
 // ── 포트폴리오 탭 ─────────────────────────────────────────
 function renderModalCats() {
   const p = state.portfolio;
@@ -1126,7 +1131,7 @@ async function savePortfolio(){
   closeModal();
   renderPortfolio();
 }
- 
+
 // ── 시총 TOP 10 탭 ────────────────────────────────────────
 function renderMcapEdit(){
   document.getElementById('mcap-edit-list').innerHTML = MCAP_TICKERS.map((t,i) => `
@@ -1173,7 +1178,7 @@ async function saveMcap(){
   closeModal();
   refreshAll();
 }
- 
+
 // ── 섹터별 TOP 3 탭 ──────────────────────────────────────
 function renderSectorEdit(){
   document.getElementById('sector-edit-list').innerHTML = SECTOR_LEADERS.map((s,si) => `
@@ -1235,9 +1240,9 @@ async function saveSectors(){
   closeModal();
   refreshAll();
 }
- 
+
 function toggleTheme(){document.body.dataset.theme=document.body.dataset.theme==='dark'?'light':'dark';}
- 
+
 // ─── MAIN REFRESH ────────────────────────────────────────
 async function refreshAll(){
   Object.keys(_cache).forEach(k => delete _cache[k]);
@@ -1256,30 +1261,30 @@ async function refreshAll(){
     renderIdx('kospi',kospi,true);
     renderFX(fx);
     renderChecklist();
- 
+
     // Collect all unique tickers: sector leaders + mcap top 10
     const sectorTickers = [...new Set(SECTOR_LEADERS.flatMap(s=>s.picks.map(p=>p.ticker)))];
     const mcapTickerList = MCAP_TICKERS.map(t=>t.ticker);
     const allUnique = [...new Set([...sectorTickers, ...mcapTickerList])];
- 
+
     const res = await Promise.allSettled(allUnique.map(t=>fetchYF(t)));
     const dataMap = {};
     allUnique.forEach((t,i)=>{if(res[i].status==='fulfilled'&&res[i].value) dataMap[t]=res[i].value;});
- 
+
     // Sector table
     state.sectors = dataMap;
     renderSectorTable(dataMap);
- 
+
     // Mcap table
     state.mcap = dataMap;
     renderMcapTable(dataMap);
- 
+
     await renderPortfolio();
     document.getElementById('updTxt').textContent=`업데이트: ${new Date().toLocaleTimeString('ko-KR')}`;
   } catch(e){console.error(e);}
   btn.classList.remove('loading'); btn.textContent='↻ 새로고침';
 }
- 
+
 refreshAll();
 setInterval(refreshAll,5*60*1000);
 </script>
