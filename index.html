@@ -48,11 +48,11 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
 .stl::after{content:'';flex:1;height:1px;background:var(--border);}
 
 /* ALERT */
-.alert-bar{display:none;align-items:center;gap:12px;padding:12px 18px;background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.28);border-radius:12px;}
+.alert-bar{display:none;align-items:center;gap:12px;padding:12px 18px;background:rgba(31,212,160,.07);border:1px solid rgba(31,212,160,.3);border-radius:12px;}
 .alert-bar.on{display:flex;}
-.a-ttl{font-weight:600;font-size:13px;color:var(--accent2);white-space:nowrap;}
+.a-ttl{font-weight:600;font-size:13px;color:var(--green);white-space:nowrap;}
 .a-tags{display:flex;flex-wrap:wrap;gap:6px;}
-.a-tag{background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.25);color:var(--accent2);padding:3px 10px;border-radius:6px;font-size:11px;font-weight:500;}
+.a-tag{background:rgba(31,212,160,.12);border:1px solid rgba(31,212,160,.25);color:var(--green);padding:3px 10px;border-radius:6px;font-size:11px;font-weight:500;}
 
 /* REBALANCE ALERT */
 .reb-bar{display:none;align-items:center;gap:12px;padding:12px 18px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:12px;}
@@ -325,13 +325,13 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:18px;}
     <div class="stl">환율</div>
     <table class="tbl">
       <thead><tr>
-        <th>통화쌍</th><th>환율</th><th class="r">전일 대비</th><th class="r">기준</th>
+        <th>통화쌍</th><th>환율</th><th class="r">기준</th>
       </tr></thead>
       <tbody>
-        <tr><td style="color:var(--text);font-weight:500">USD / KRW</td><td class="tmono" id="fxUSD">—</td><td class="r neu" id="fxUSDch">—</td><td class="r" style="color:var(--text3);font-size:11px">원/달러</td></tr>
-        <tr><td style="color:var(--text);font-weight:500">JPY / KRW</td><td class="tmono" id="fxJPY">—</td><td class="r neu" id="fxJPYch">—</td><td class="r" style="color:var(--text3);font-size:11px">원/100엔</td></tr>
-        <tr><td style="color:var(--text);font-weight:500">EUR / KRW</td><td class="tmono" id="fxEUR">—</td><td class="r neu" id="fxEURch">—</td><td class="r" style="color:var(--text3);font-size:11px">원/유로</td></tr>
-        <tr><td style="color:var(--text);font-weight:500">CNY / KRW</td><td class="tmono" id="fxCNY">—</td><td class="r neu" id="fxCNYch">—</td><td class="r" style="color:var(--text3);font-size:11px">원/위안</td></tr>
+        <tr><td style="color:var(--text);font-weight:500">USD / KRW</td><td class="tmono" id="fxUSD">—</td><td class="r" style="color:var(--text3);font-size:11px">원/달러</td></tr>
+        <tr><td style="color:var(--text);font-weight:500">JPY / KRW</td><td class="tmono" id="fxJPY">—</td><td class="r" style="color:var(--text3);font-size:11px">원/100엔</td></tr>
+        <tr><td style="color:var(--text);font-weight:500">EUR / KRW</td><td class="tmono" id="fxEUR">—</td><td class="r" style="color:var(--text3);font-size:11px">원/유로</td></tr>
+        <tr><td style="color:var(--text);font-weight:500">CNY / KRW</td><td class="tmono" id="fxCNY">—</td><td class="r" style="color:var(--text3);font-size:11px">원/위안</td></tr>
       </tbody>
     </table>
   </div>
@@ -619,7 +619,18 @@ async function fetchYF(ticker) {
     const prev    = res.meta?.previousClose     ?? closes.at(-2) ?? current;
     const high52  = res.meta?.fiftyTwoWeekHigh  ?? Math.max(...closes);
     const ma20    = last20c.reduce((a,b)=>a+b,0) / (last20c.length||1);
-    const marketCap = res.meta?.marketCap ?? null;
+    // marketCap: meta 직접값 → sharesOutstanding 계산 → 하드코딩 근사값
+    const shares = res.meta?.sharesOutstanding ?? null;
+    const MCAP_FALLBACK = {
+      // 2026.06 기준 근사값 (단위: USD)
+      'NVDA' :5.2e12, 'GOOGL':4.6e12, 'AAPL' :4.5e12,
+      'MSFT' :3.1e12, 'AMZN' :2.9e12, 'META' :1.7e12,
+      'TSLA' :1.2e12, 'AVGO' :1.1e12, 'BRK-B':1.1e12,
+      'TSM'  :0.9e12, 'NVDA' :5.2e12,
+    };
+    const marketCap = res.meta?.marketCap
+      ?? (shares ? shares * current : null)
+      ?? MCAP_FALLBACK[ticker] ?? null;
     const result = {
       ticker, current, prev,
       change:    current - prev,
@@ -751,14 +762,14 @@ function renderVIX(d) {
   if (!d) return;
   document.getElementById('vixVal').textContent = f(d.current,2);
   const el=document.getElementById('vixChg');
-  el.textContent=`${fp(d.changePct)} 오늘`; el.className=`idx-chg ${cc(-d.changePct)}`;
+  el.textContent=`${fp(d.changePct)} 오늘`; el.className=`idx-chg ${cc(d.changePct)}`;
   const b=document.getElementById('vixBadge'); const v=d.current;
   if(v<15){b.textContent='😌 안정 (<15)';b.className='vbadge vb0';}
   else if(v<20){b.textContent='😐 보통 (15–20)';b.className='vbadge vb0';}
   else if(v<25){b.textContent='⚡ 경계 (20–25)';b.className='vbadge vb1';}
   else if(v<35){b.textContent='🔥 공포 (25–35)';b.className='vbadge vb2';}
   else{b.textContent='🚨 극단 공포 (35+)';b.className='vbadge vb3';}
-  drawSpark('vixChart',d.closes,d.labels,true,56, d.changePct>=0);
+  drawSpark('vixChart',d.closes,d.labels,false,56, d.changePct>=0);
 }
 function renderIdx(id,d,noPrefix=false) {
   if (!d) return;
@@ -774,9 +785,7 @@ function renderFX(fx) {
   document.getElementById('fxJPY').textContent=f(fx.JPYKRW,2);
   document.getElementById('fxEUR').textContent=f(fx.EURKRW,1);
   document.getElementById('fxCNY').textContent=f(fx.CNYKRW,2);
-  ['fxUSDch','fxJPYch','fxEURch','fxCNYch'].forEach(id=>{
-    document.getElementById(id).textContent='—';
-  });
+
 }
 
 // ─── MCAP TOP 10 ─────────────────────────────────────────
