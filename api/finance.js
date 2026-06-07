@@ -101,12 +101,13 @@ export default async function handler(req, res) {
 
   if (!chartData) return res.status(502).json({ error: `No data for ${ticker}` });
 
-  // quote에서 marketCap, longName을 chart meta에 병합
+  // quote에서 marketCap, sharesOutstanding, longName을 chart meta에 병합
   if (quoteData && chartData.chart?.result?.[0]?.meta) {
     const meta = chartData.chart.result[0].meta;
-    if (quoteData.marketCap)  meta.marketCap = quoteData.marketCap;
-    if (quoteData.longName)   meta.longName  = quoteData.longName;
-    if (quoteData.sector)     meta.sector    = quoteData.sector;
+    if (quoteData.marketCap)        meta.marketCap        = quoteData.marketCap;
+    if (quoteData.sharesOutstanding) meta.sharesOutstanding = quoteData.sharesOutstanding;
+    if (quoteData.longName)         meta.longName         = quoteData.longName;
+    if (quoteData.sector)           meta.sector           = quoteData.sector;
   }
 
   return res.status(200).json(chartData);
