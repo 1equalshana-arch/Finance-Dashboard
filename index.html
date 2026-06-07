@@ -545,31 +545,44 @@ let state = {
   fx:{USDKRW:1350, JPYKRW:900, EURKRW:1480, CNYKRW:186},
   sectors:{},
   mcap:{},
-  entryPrices: JSON.parse(localStorage.getItem('sigma_entry') || '{}'),
-  entrySharesToRef: JSON.parse(localStorage.getItem('sigma_entryshares') || '{}'),
-  portfolio: JSON.parse(localStorage.getItem('sigma_pf') || 'null') || DEFAULT_PF,
+  entryPrices: {},
+  entrySharesToRef: {},
+  portfolio: DEFAULT_PF,
 };
 let charts = {};
  
-// localStorage에 저장된 커스텀 설정 복원
-(function() {
-  const savedMcap = localStorage.getItem('sigma_mcap');
-  if (savedMcap) {
-    try {
-      const m = JSON.parse(savedMcap);
-      MCAP_TICKERS.length = 0;
-      m.forEach(t => MCAP_TICKERS.push(t));
-    } catch {}
-  }
-  const savedSectors = localStorage.getItem('sigma_sectors');
-  if (savedSectors) {
-    try {
-      const s = JSON.parse(savedSectors);
-      SECTOR_LEADERS.length = 0;
-      s.forEach(x => SECTOR_LEADERS.push(x));
-    } catch {}
-  }
-})();
+// ─── KV STORAGE (기기 간 동기화) ──────────────────────────
+async function kvGet(key) {
+  try {
+    const r = await fetch(`/api/settings?key=${key}`);
+    const d = await r.json();
+    return d.value ?? null;
+  } catch { return null; }
+}
+ 
+async function kvSet(key, value) {
+  try {
+    await fetch(`/api/settings?key=${key}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value }),
+    });
+  } catch(e) { console.warn('kvSet failed', key, e); }
+}
+ 
+// 앱 시작 시 KV에서 설정 로드
+async function loadSettings() {
+  const [pf, mcap, sectors, entry] = await Promise.all([
+    kvGet('sigma_pf'),
+    kvGet('sigma_mcap'),
+    kvGet('sigma_sectors'),
+    kvGet('sigma_entry'),
+  ]);
+  if (pf)      state.portfolio = pf;
+  if (mcap)    { MCAP_TICKERS.length=0;    mcap.forEach(t=>MCAP_TICKERS.push(t)); }
+  if (sectors) { SECTOR_LEADERS.length=0;  sectors.forEach(s=>SECTOR_LEADERS.push(s)); }
+  if (entry)   state.entryPrices = entry;
+}
  
 // ─── FETCH ───────────────────────────────────────────────
 // /api/finance → Vercel serverless proxy → Yahoo Finance
@@ -913,7 +926,7 @@ function renderSectorTable(sd) {
  
 function saveEntry(ticker, val) {
   state.entryPrices[ticker] = parseFloat(val)||0;
-  localStorage.setItem('sigma_entry', JSON.stringify(state.entryPrices));
+  kvSet('sigma_entry', state.entryPrices);
   renderSectorTable(state.sectors);
 }
  
@@ -1104,12 +1117,12 @@ async function pfTickerBlur(cid, si, inputEl) {
 function updS(cid,si,f,v){const c=state.portfolio.categories.find(c=>c.id===cid);if(c)c.stocks[si][f]=v;}
 function rmS(cid,si){const c=state.portfolio.categories.find(c=>c.id===cid);if(c){c.stocks.splice(si,1);renderModalCats();}}
 function addS(cid){const c=state.portfolio.categories.find(c=>c.id===cid);if(c){c.stocks.push({ticker:'',name:'',shares:0,market:'US'});renderModalCats();}}
-function savePortfolio(){
+async function savePortfolio(){
   state.portfolio.cashUSD=parseFloat(document.getElementById('cashUSD').value)||0;
   state.portfolio.cashKRW=parseFloat(document.getElementById('cashKRW').value)||0;
   state.portfolio.goalMan=parseFloat(document.getElementById('goalAmt').value)||5000;
   state.portfolio.principalMan=parseFloat(document.getElementById('principalAmt').value)||23000;
-  localStorage.setItem('sigma_pf',JSON.stringify(state.portfolio));
+  await kvSet('sigma_pf', state.portfolio);
   closeModal();
   renderPortfolio();
 }
@@ -1146,7 +1159,7 @@ function clearMcapRow(i){
   if(st){ st.textContent=''; st.className='ticker-status'; }
   if(MCAP_TICKERS[i]){ MCAP_TICKERS[i].ticker=''; MCAP_TICKERS[i].name=''; }
 }
-function saveMcap(){
+async function saveMcap(){
   const newList = [];
   MCAP_TICKERS.forEach((t,i) => {
     const inp = document.getElementById(`mcap-t-${i}`);
@@ -1156,7 +1169,7 @@ function saveMcap(){
   if(!newList.length){alert('최소 1개 이상 입력하세요.');return;}
   MCAP_TICKERS.length=0;
   newList.forEach(t=>MCAP_TICKERS.push(t));
-  localStorage.setItem('sigma_mcap', JSON.stringify(MCAP_TICKERS));
+  await kvSet('sigma_mcap', MCAP_TICKERS);
   closeModal();
   refreshAll();
 }
@@ -1213,12 +1226,12 @@ function addSectorEdit(){
   SECTOR_LEADERS.push({id:'new'+Date.now(),name:'새 섹터',color:col,picks:[{ticker:'',fullName:'',shares:0}]});
   renderSectorEdit();
 }
-function saveSectors(){
+async function saveSectors(){
   SECTOR_LEADERS.forEach(s=>{s.picks=s.picks.filter(p=>p.ticker.trim())});
   const valid = SECTOR_LEADERS.filter(s=>s.picks.length>0);
   SECTOR_LEADERS.length=0;
   valid.forEach(s=>SECTOR_LEADERS.push(s));
-  localStorage.setItem('sigma_sectors', JSON.stringify(SECTOR_LEADERS));
+  await kvSet('sigma_sectors', SECTOR_LEADERS);
   closeModal();
   refreshAll();
 }
@@ -1231,6 +1244,7 @@ async function refreshAll(){
   const btn=document.getElementById('refreshBtn');
   btn.classList.add('loading'); btn.textContent='⟳ 업데이트 중...';
   try {
+    await loadSettings();
     checkRebalance();
     const [vix,spy,qqq,kospi,fx]=await Promise.all([
       fetchYF('^VIX'),fetchYF('SPY'),fetchYF('QQQ'),fetchYF('^KS11'),fetchFX()
