@@ -13,7 +13,6 @@ const YF_HEADERS = {
   'Referer': 'https://finance.yahoo.com/',
 };
 
-// chart v8: 히스토리 + meta
 async function fetchChart(ticker) {
   const candidates = [
     `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=3mo`,
@@ -30,52 +29,43 @@ async function fetchChart(ticker) {
   return null;
 }
 
-// quoteSummary: 시총 등 상세 정보
-async function fetchQuoteSummary(ticker) {
-  const url = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(ticker)}?modules=summaryDetail,price`;
-  try {
-    const r = await fetch(url, { headers: YF_HEADERS });
-    if (!r.ok) return null;
-    const d = await r.json();
-    const price = d?.quoteSummary?.result?.[0]?.price;
-    const summary = d?.quoteSummary?.result?.[0]?.summaryDetail;
-    if (!price) return null;
-    return {
-      marketCap: price.marketCap?.raw ?? summary?.marketCap?.raw ?? null,
-      longName: price.longName ?? null,
-      sector: price.sector ?? null,
-    };
-  } catch { return null; }
+// v7 quote: marketCap, longName 등 포함
+async function fetchQuote(ticker) {
+  const candidates = [
+    `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(ticker)}`,
+    `https://query2.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(ticker)}`,
+  ];
+  for (const url of candidates) {
+    try {
+      const r = await fetch(url, { headers: YF_HEADERS });
+      if (!r.ok) continue;
+      const d = await r.json();
+      const q = d?.quoteResponse?.result?.[0];
+      if (q) return q;
+    } catch {}
+  }
+  return null;
 }
 
-// ^VIX 전용
 async function fetchVIX() {
   const chartData = await fetchChart('^VIX');
   if (chartData) return chartData;
-  try {
-    const r = await fetch(
-      'https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5EVIX',
-      { headers: YF_HEADERS }
-    );
-    if (!r.ok) throw new Error('quote failed');
-    const d = await r.json();
-    const q = d?.quoteResponse?.result?.[0];
-    if (!q) throw new Error('no quote result');
-    return {
-      chart: {
-        result: [{
-          meta: {
-            regularMarketPrice: q.regularMarketPrice,
-            previousClose: q.regularMarketPreviousClose,
-            fiftyTwoWeekHigh: q.fiftyTwoWeekHigh,
-          },
-          timestamp: [Date.now() / 1000],
-          indicators: { quote: [{ close: [q.regularMarketPrice] }] }
-        }]
-      }
-    };
-  } catch {}
-  return null;
+  // fallback: quote만
+  const q = await fetchQuote('^VIX');
+  if (!q) return null;
+  return {
+    chart: {
+      result: [{
+        meta: {
+          regularMarketPrice: q.regularMarketPrice,
+          previousClose: q.regularMarketPreviousClose,
+          fiftyTwoWeekHigh: q.fiftyTwoWeekHigh,
+        },
+        timestamp: [Date.now() / 1000],
+        indicators: { quote: [{ close: [q.regularMarketPrice] }] }
+      }]
+    }
+  };
 }
 
 export default async function handler(req, res) {
@@ -102,18 +92,21 @@ export default async function handler(req, res) {
   if (!ticker) return res.status(400).json({ error: 'ticker required' });
 
   const isVIX = ticker === '^VIX';
-  const [chartData, extraData] = await Promise.all([
+
+  // chart + quote 병렬 fetch
+  const [chartData, quoteData] = await Promise.all([
     isVIX ? fetchVIX() : fetchChart(ticker),
-    isVIX ? Promise.resolve(null) : fetchQuoteSummary(ticker),
+    isVIX ? Promise.resolve(null) : fetchQuote(ticker),
   ]);
 
   if (!chartData) return res.status(502).json({ error: `No data for ${ticker}` });
 
-  // extraData의 marketCap을 chart meta에 병합
-  if (extraData && chartData.chart?.result?.[0]?.meta) {
+  // quote에서 marketCap, longName을 chart meta에 병합
+  if (quoteData && chartData.chart?.result?.[0]?.meta) {
     const meta = chartData.chart.result[0].meta;
-    if (!meta.marketCap && extraData.marketCap) meta.marketCap = extraData.marketCap;
-    if (!meta.longName  && extraData.longName)  meta.longName  = extraData.longName;
+    if (quoteData.marketCap)  meta.marketCap = quoteData.marketCap;
+    if (quoteData.longName)   meta.longName  = quoteData.longName;
+    if (quoteData.sector)     meta.sector    = quoteData.sector;
   }
 
   return res.status(200).json(chartData);
